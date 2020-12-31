@@ -10,7 +10,8 @@ function App() {
   const [can, setCan] = React.useState(true)
 
   const popUpCard = () => {
-    document.getElementById('itembox').style.top = '0%';
+    document.getElementById('itemback').classList.remove('hidden')
+    document.getElementById('itembox').style.top = '120px';
     document.getElementById('popupbtn').firstChild.innerText = '새해소망 제출하기'
     setBtnState(0)
   }
@@ -24,6 +25,7 @@ function App() {
   }
 
   const closeCard = () => {
+    document.getElementById('itemback').classList.add('hidden')
     document.getElementById('itembox').style.top = '100%';
     document.getElementById('popupbtn').firstChild.innerText = '새해소망 작성하기'
     setBtnState(1)
@@ -101,7 +103,14 @@ function App() {
             </div>
           </div>
         </div>
-        <div id='itembox'>
+        <div id='popupbtn' onClick={
+          (can?btnState?() => popUpCard():() => sendCard():undefined)
+        }>
+          <p>새해소망 작성하기</p>
+        </div>
+      </div>
+      <div id='itemback' className='hidden'></div>
+      <div id='itembox'>
           <div id='user'>
             <input type='text' tabIndex='-1' placeholder='nickname' onChange = {e => setUsername(e.target.value)}/>
             <input type='button' tabIndex='-1' value='test' onClick={() => alert(username)}/>
@@ -126,12 +135,6 @@ function App() {
           <div id='closebtn' onClick={() => closeCard()}>
             <span style={{position:'relative', width:10, height:10, marginTop:10}}>X</span>
           </div>
-        </div>
-        <div id='popupbtn' onClick={
-          (can?btnState?() => popUpCard():() => sendCard():undefined)
-        }>
-          <p>새해소망 작성하기</p>
-        </div>
       </div>
       <div id='modalback' class='hidden'>
       </div>

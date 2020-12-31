@@ -1,3 +1,9 @@
+html, body {
+  margin:0;
+  padding:0;
+
+}
+
 #container{
   display: flex;
   position: relative;
@@ -5,6 +11,7 @@
   width:100vw;
   height:100vh;
   background-color: azure;
+  overflow-y: hidden;
 }
 
 #header{
@@ -23,16 +30,26 @@
 }
 
 #itembox {
-  position: relative;
-  margin-left: 300px;
-  margin-right: 300px;
+  position: absolute;
+  width:600px;
   height:400px;
-  border-radius: 15px;
-  background-color: beige;
+  margin-left: 50%;
+  left: -300px;
+  top: 100%;
+  transition: all .3s ease;
+  border-radius: 50px;
+  background: white;
   display: flex;
-  top:100%;
-  left:0%;
-  transition: .4s ease-in;
+  padding: 10px;
+}
+
+#itemback{
+  position: absolute;
+  top:0;
+  left: 0;
+  width:100vw;
+  height:100vh;
+  background: rgba(128, 128, 128, 0.247);
 }
 
 #popupbtn {
