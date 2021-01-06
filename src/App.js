@@ -1,13 +1,29 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
+import Oauth from './pages/oauthPage';
+import { Route } from 'react-router-dom';
 
-function App() {
+const MainPage = () => {
   const [username, setUsername] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [content, setContent] = React.useState('')
   const [btnState, setBtnState] = React.useState(1)
   const [can, setCan] = React.useState(true)
+
+  let _csrfToken = null
+
+  async function getCsrfToken() {
+    if (_csrfToken === null) {
+      const response = await fetch(`http://localhost:8000/main/get_csrf/`, {
+        credentials: 'include',
+      });
+      const data = await response.json();
+      _csrfToken = data.csrfToken;
+    }
+    console.log(_csrfToken)
+    return _csrfToken;
+  }
 
   const popUpCard = () => {
     document.getElementById('itemback').classList.remove('hidden')
@@ -59,15 +75,33 @@ function App() {
     modalback.classList.add('hidden')
   }
 
+  async function csrfTest() {
+    const res = await fetch('http://localhost:8000/main/csrf_test/',{
+      method:'POST',
+      headers:{
+        'X-CSRFToken':await getCsrfToken()
+      },
+      credentials:'include'
+    });
+    const data = await res.json()
+    alert(data.message)
+    return data.message
+  }
+
   return (
     <div id='container'>
       <div id='header'>
         <div id='icon'>
           test
         </div>
+        <div id='loginbtn'>
+           <a href='https://kauth.kakao.com/oauth/authorize?client_id=20887ce0003dfa62635c435e177fee15&redirect_uri=http://localhost:3000/oauth&response_type=code'>카카오 로그인</a>
+           <a href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://localhost:3000'>카카오 로그아웃</a>
+        </div>
       </div>
       <div style={{textAlign:'center', fontSize:22, paddingTop:15}}>
         새해 목표를 정해보세요
+        <p onClick={() => csrfTest()}>csrf test</p>
       </div>
       <div id='content'>
         <div id='mainCont'>
@@ -146,6 +180,15 @@ function App() {
       </div>
     </div>
   );
+}
+
+function App() {
+  return(
+    <>
+    <Route path='/' exact component={MainPage} />
+    <Route path='/oauth' exact component={Oauth} />
+    </>
+  )
 }
 
 export default App;
