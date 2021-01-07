@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import queryString from 'query-string';
+import getCookie from '../getCsrfToken';
 
 const Oauth = ({location, match}) => {
     const query = queryString.parse(location.search)
@@ -9,9 +10,13 @@ const Oauth = ({location, match}) => {
     useEffect(() => {
         fetch('http://localhost:8000/main/oauth/', {
             method:'POST',
+            headers:{
+                'X-CSRFToken':`${getCookie('csrftoken')}`
+            },
             body:JSON.stringify({
                 code:query.code
-            })
+            }),
+            credentials:'include'
         })
         .then(res => res.json())
         .then(json => {
@@ -23,9 +28,13 @@ const Oauth = ({location, match}) => {
         .then(
             fetch('http://localhost:8000/main/user_info/',{
                 method:'POST',
+                headers:{
+                    'X-CSRFToken':`${getCookie('csrftoken')}`
+                },
                 body:JSON.stringify({
                     access_token:accessToken
-                })
+                }),
+                credentials:'include'
             })
             .then(res => res.json())
             .then(json => alert(JSON.stringify(json)))

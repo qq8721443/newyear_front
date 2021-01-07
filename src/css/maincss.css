@@ -1,0 +1,57 @@
+
+
+body {
+    margin: 0;
+    background: #f2f2f2;
+}
+
+#header {
+    height:15vh;
+    background-color: gray;
+    margin-bottom: 10px;
+}
+
+#content {
+    height:85vh;
+    display: flex;
+    margin-top: 10px;
+    margin: 0 80px;
+}
+
+.ad-section {
+    flex:1;
+    background:red;
+    margin:0 5px;
+}
+
+#con-section {
+    flex:4;
+}
+
+#banner {
+    height:25vh;
+    background: greenyellow;
+    margin: 0 5px;
+    margin-bottom: 10px;
+}
+
+#thumb {
+    position: relative;
+    height: 55vh;
+    margin: 0 5px;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.thumb-item1 {
+    flex: 1.5;
+    background: ivory;
+    border-radius: 5px;
+}
+
+.thumb-item2 {
+    flex: 2;
+    background: ivory;
+    border-radius: 5px;
+}
