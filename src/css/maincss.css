@@ -7,7 +7,7 @@ body {
 
 #header {
     height:15vh;
-    background-color: gray;
+    background-color: #ffc764;
     margin-bottom: 10px;
 }
 
@@ -20,7 +20,7 @@ body {
 
 .ad-section {
     flex:1;
-    background:red;
+    background:gray;
     margin:0 5px;
 }
 
@@ -30,7 +30,7 @@ body {
 
 #banner {
     height:25vh;
-    background: greenyellow;
+    background: white;
     margin: 0 5px;
     margin-bottom: 10px;
 }
@@ -46,12 +46,155 @@ body {
 
 .thumb-item1 {
     flex: 1.5;
-    background: ivory;
+    background: #fff;
     border-radius: 5px;
+    position: relative;
+}
+
+#hope-container {
+    position: relative;
+    height:52vh;
+    background: white;
+    overflow-y: scroll;
+
+}
+
+.hope-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f2f2f2;
+    height:10vh;
+}
+
+.hope-list-item1 {
+    position: relative;
+    width:100%;
+    background: tomato;
+}
+
+.hope-list-item2 {
+    position: relative;
+    width:50%;
 }
 
 .thumb-item2 {
     flex: 2;
-    background: ivory;
+    background: #fff;
     border-radius: 5px;
+    position: relative;
+}
+
+.post-list {
+    position: relative;
+    border-bottom: 1px solid #f2f2f2;
+    height:10.2vh;
+    cursor: pointer;
+}
+
+.post-list-title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.post-list-author {
+    position: absolute;
+    top: 10px;
+    left: 70px;
+}
+
+.post-list-content {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+}
+
+.thumb-title {
+    all: unset;
+    display: flex;
+    width: 100%;
+    background: #f2f2f2;
+}
+
+#logo {
+    position: absolute;
+    width: 200px;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 85px;
+    background: rosybrown;
+}
+
+#userinfo {
+    position: absolute;
+    width:200px;
+    height:15vh;
+    display: flex;
+    align-items: center;
+    right:85px;
+    top:0;
+    background: rosybrown;
+}
+
+#login-btn {
+    all:unset;
+    position: absolute;
+    right:0;
+    top: 6vh;
+    background: #ffc764;
+    color: white;
+    border:1px solid white;
+    border-radius: 2px;
+    width:60px;
+    height:20px;
+    text-align: center;
+    transition: all .3s;
+}
+
+#login-btn:hover {
+    background: white;
+    border-color: #ffc764;
+    color: #ffc764;
+}
+
+.more-btn {
+    position: absolute;
+    right:0;
+    top:-15px;
+    cursor: pointer;
+}
+
+.emp {
+    all: unset;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 여기부터는 postlist.js css */
+#post_list {
+    
+}
+
+.post_list_item {
+    width:100%;
+    height:70px;
+    background: white;
+    border-bottom: 1px solid #f2f2f2;
+    cursor: pointer;
+}
+
+#comment_list {
+    position: relative;
+    width:100%;
+}
+
+.comment_item {
+    position: relative;
+    width:100%;
+    overflow: auto;
+    border-bottom: 1px solid #f2f2f2;
 }

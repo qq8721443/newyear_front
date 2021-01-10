@@ -14,4 +14,12 @@ function getCookie(name) {
     return cookieValue;
 }
 
-export default getCookie;
+function setCookie(name, value) {
+    document.cookie = name + '=' + value
+}
+
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+}
+
+export { getCookie, setCookie, deleteCookie };
