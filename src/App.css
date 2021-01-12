@@ -51,7 +51,7 @@ html, body {
   left: 0;
   width:100vw;
   height:100vh;
-  background: rgba(128, 128, 128, 0.247);
+  background: rgba(128, 128, 128, 0.8);
 }
 
 #popupbtn {
@@ -176,7 +176,7 @@ html, body {
 }
 
 #modalback {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: black;
   position: absolute;
   width:100vw;
   height:100vh;

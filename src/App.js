@@ -7,6 +7,7 @@ import Logout from './components/logout';
 import PostList from './pages/postlist';
 import DetailPage from './pages/detailpage';
 import CreatePost from './pages/createPost';
+import Register from './pages/register';
 
 function App() {
   return(
@@ -17,6 +18,7 @@ function App() {
       <Route path='/posts' exact component={PostList}/>
       <Route path='/posts/:post_id' exact component={DetailPage}/>
       <Route path='/create' exact component={CreatePost}/>
+      <Route path='/register' exact component={Register}/>
     </>
   )
 }

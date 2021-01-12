@@ -3,7 +3,7 @@ import './App.css';
 import React, { useEffect } from 'react';
 import Oauth from './pages/oauthPage';
 import { Route } from 'react-router-dom';
-import getCookie from './getCsrfToken';
+import {getCookie} from './components/cookies';
 
 const MainPage = () => {
   const [username, setUsername] = React.useState('')

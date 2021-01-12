@@ -9,30 +9,39 @@ const DetailPage = ({history, match}) => {
     const [isPostLoading, setPostLoading] = React.useState(true)
     const [isLoading, setLoading] = React.useState(true)
 
-    async function getComment(){
-        const response = await fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`,{
-            credentials:'include'
-        })
-        const data = await response.json()
-        setComment(data)
-        setLoading(false)
-    }
-
-    async function getPost(){
-        const response = await fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
-            credentials:'include'
-        })
-        const data = await response.json()
-        setPost(data)
-        console.log(post)
-        setPostLoading(false)
-    }
+    
 
     React.useEffect(() => {
-        console.log("useEffect 실행") 
-        getPost()
-        getComment()
-    }, [isPostLoading])
+        console.log("useEffect 실행")
+
+        async function getComment(){
+            const response = await fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`,{
+                credentials:'include'
+            })
+            const data = await response.json()
+            setComment(data)
+            setLoading(false)
+        }
+    
+        async function getPost(){
+            const response = await fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
+                credentials:'include'
+            })
+            const data = await response.json()
+            setPost(data)
+            console.log(post)
+            setPostLoading(false)
+        }
+
+        if(isLoading){
+            if(isPostLoading){
+                getPost()
+                getComment()
+            } else {
+                getComment()
+            }
+        }
+    }, [isLoading, isPostLoading, match.params.post_id, post])
 
     async function postComment() {
         const response = await fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
@@ -84,9 +93,10 @@ const DetailPage = ({history, match}) => {
                         :
                         post.res[0].title}
                         <span style={{position:'absolute', left:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{isPostLoading?'loading':post.res[0].author}</span>
-                        <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>date</span>
+                        <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{isPostLoading?'loading':post.res[0].created_dt.split('T')[0]}</span>
+                        <span>{isPostLoading?'loading':post.res[0].views}</span>
                     </div>
-                    <div id='post_content' style={{marginTop:'10px', width:'100%', textAlign:'start'}}>
+                    <div id='post_content' style={{marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px'}}>
                         {isPostLoading?
                         'loading'
                         :
@@ -98,7 +108,7 @@ const DetailPage = ({history, match}) => {
                             {JSON.parse(localStorage.getItem('USER_INFO')).is_login?
                             <>
                             <input id='_commentinput' type='text' placeholder='댓글' style={{width:'80%'}} onChange={(e) => setComInput(e.target.value)}/>
-                            <input type='button' value='등록' onClick={() => {postComment(); setPostLoading(true); document.getElementById('_commentinput').value = ''}}/>
+                            <input type='button' value='등록' onClick={() => {postComment(); setLoading(true); document.getElementById('_commentinput').value = ''}}/>
                             </>
                             :
                             <>
@@ -107,7 +117,7 @@ const DetailPage = ({history, match}) => {
                             </>
                             }
                         </div>
-                        <div id='comment_list'>
+                        <div id='comment_list' style={{backgroundColor:'white'}}>
                             <div style={{position:'relative', width:'100%', textAlign:'left', paddingLeft:'10px'}}>댓글</div>
                             {isLoading?
                             'loading'

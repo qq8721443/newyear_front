@@ -28,7 +28,8 @@ const CreatePost = ({history}) => {
             body:JSON.stringify({
                 title:title,
                 content:content,
-                author:JSON.parse(localStorage.getItem('USER_INFO')).nickname
+                author:JSON.parse(localStorage.getItem('USER_INFO')).nickname,
+                author_id:JSON.parse(localStorage.getItem('USER_INFO')).user_id
             }),
             credentials:'include'
         })
