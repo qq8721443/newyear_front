@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/maincss.css'
 import { getCookie } from '../components/cookies';
+import LoginModal from '../components/loginModal';
 
 const DetailPage = ({history, match}) => {
     const [comment_input, setComInput] = React.useState('')
@@ -14,77 +15,69 @@ const DetailPage = ({history, match}) => {
     React.useEffect(() => {
         console.log("useEffect 실행")
 
-        async function getComment(){
-            const response = await fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`,{
+        function getComment(){
+            console.log('comment')
+            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
                 credentials:'include'
             })
-            const data = await response.json()
-            setComment(data)
-            setLoading(false)
+            .then(res => res.json())
+            .then(json => {
+                setComment(json)
+                setLoading(false)
+            })
         }
     
-        async function getPost(){
-            const response = await fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
+        function getPost(){
+            console.log('post')
+            fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
                 credentials:'include'
             })
-            const data = await response.json()
-            setPost(data)
-            console.log(post)
-            setPostLoading(false)
+            .then(res => res.json())
+            .then(json => {
+                setPost(json)
+                console.log(post)
+                setPostLoading(false)
+            })
         }
 
         if(isLoading){
-            if(isPostLoading){
-                getPost()
-                getComment()
-            } else {
-                getComment()
-            }
+            getComment()
+        }
+        if (isPostLoading){
+            getPost()
         }
     }, [isLoading, isPostLoading, match.params.post_id, post])
 
-    async function postComment() {
-        const response = await fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
-            method:'POST',
-            headers:{
-                'X-CSRFToken':getCookie('csrftoken')
-            },
-            body:JSON.stringify({
-                content:comment_input,
-                author:JSON.parse(localStorage.getItem('USER_INFO')).nickname
-            }),
-            credentials:'include'
-        })
-        const data = await response.json()
-        console.log(data)
+    function postComment() {
+        console.log('post comment 시작')
+        const valid_check = document.getElementById('_commentinput').value
+        if(valid_check === ''){
+            alert('댓글을 입력해주세요')
+        } else {
+            setLoading(true)
+            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
+                method:'POST',
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken')
+                },
+                body:JSON.stringify({
+                    content:comment_input,
+                    author:JSON.parse(localStorage.getItem('USER_INFO')).nickname
+                }),
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                setComInput('')
+                console.log(json)
+                setLoading(false)
+                console.log('post comment 종료')
+            })
+        }
     }
 
     return(
         <div>
-            <div id='header'>
-                <div id='logo' onClick={() => history.push('/')} style={{cursor:'pointer'}}>
-                    LOGO
-                </div>
-                <div id='userinfo'>
-                {JSON.parse(localStorage.getItem('USER_INFO')).is_login===true?
-                <div>
-                    <p>{JSON.parse(localStorage.getItem('USER_INFO')).nickname}</p>
-                    <a href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://localhost:3000/logout'>
-                        <div id='login-btn'>
-                            로그아웃        
-                        </div>
-                    </a>
-                </div>
-                :
-                <a href='https://kauth.kakao.com/oauth/authorize?client_id=20887ce0003dfa62635c435e177fee15&redirect_uri=http://localhost:3000/oauth&response_type=code'>
-                    <div id='login-btn'>
-                        로그인        
-                    </div>
-                </a>
-                }
-                    
-                </div>
-            </div>
             <div id='content' style={{justifyContent:'center'}}>
                 <div id='post' style={{backgroundColor:'#fff', position:'relative', width:'800px', textAlign:'center'}}>
                     <div id='post_title' style={{position:'relative', height:'100px', fontWeight:'bold', fontSize:'44px', borderBottom:'2px solid #f2f2f2', marginTop:'10px', color:'gray'}}>
@@ -108,7 +101,7 @@ const DetailPage = ({history, match}) => {
                             {JSON.parse(localStorage.getItem('USER_INFO')).is_login?
                             <>
                             <input id='_commentinput' type='text' placeholder='댓글' style={{width:'80%'}} onChange={(e) => setComInput(e.target.value)}/>
-                            <input type='button' value='등록' onClick={() => {postComment(); setLoading(true); document.getElementById('_commentinput').value = ''}}/>
+                            <input type='button' value='등록' onClick={() => {postComment(); document.getElementById('_commentinput').value = '';}}/>
                             </>
                             :
                             <>
@@ -141,6 +134,7 @@ const DetailPage = ({history, match}) => {
                     </div>
                 </div>
             </div>
+            <LoginModal/>
         </div>
     )
 }

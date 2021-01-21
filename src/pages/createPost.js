@@ -29,7 +29,7 @@ const CreatePost = ({history}) => {
                 title:title,
                 content:content,
                 author:JSON.parse(localStorage.getItem('USER_INFO')).nickname,
-                author_id:JSON.parse(localStorage.getItem('USER_INFO')).user_id
+                author_email:JSON.parse(localStorage.getItem('USER_INFO')).email
             }),
             credentials:'include'
         })
@@ -40,30 +40,6 @@ const CreatePost = ({history}) => {
 
     return(
         <div>
-            <div id='header'>
-                <div id='logo' onClick={() => history.push('/')} style={{cursor:'pointer'}}>
-                    LOGO
-                </div>
-                <div id='userinfo'>
-                {JSON.parse(localStorage.getItem('USER_INFO')).is_login===true?
-                <div>
-                    <p>{JSON.parse(localStorage.getItem('USER_INFO')).nickname}</p>
-                    <a href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://localhost:3000/logout'>
-                        <div id='login-btn'>
-                            로그아웃        
-                        </div>
-                    </a>
-                </div>
-                :
-                <a href='https://kauth.kakao.com/oauth/authorize?client_id=20887ce0003dfa62635c435e177fee15&redirect_uri=http://localhost:3000/oauth&response_type=code'>
-                    <div id='login-btn'>
-                        로그인        
-                    </div>
-                </a>
-                }
-                    
-                </div>
-            </div>
             <div id='content' style={{justifyContent:'center'}}>
                 <div id='create_post' style={{backgroundColor:'#fff', position:'relative', width:'800px', textAlign:'center'}}>
                     <input type='text' onChange={(e) => setTitle(e.target.value)} placeholder='제목을 입력해주세요' style={{all:'unset', position:'relative', width:'90%', height:'100px', borderBottom:'1px solid #f2f2f2', fontSize:'30px', textAlign:'start'}}/>

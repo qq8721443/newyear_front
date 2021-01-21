@@ -1,8 +1,10 @@
 import React from 'react';
+import LoginModal from '../components/loginModal';
 import '../css/testcss.css'
 
 const PostList = ({history}) => {
     const [isLoading, setLoading] = React.useState(true)
+    const [isData, setData] = React.useState(false)
     const [post, setPost] = React.useState()
 
     async function getPost() {
@@ -10,8 +12,13 @@ const PostList = ({history}) => {
             credentials:'include'
         })
         const post_res = await res.json()
-        setPost(post_res)
-        setLoading(false)
+        if(post_res.res === "there's no data"){
+            setLoading(false)
+        } else {
+            setPost(post_res)
+            setLoading(false)
+            setData(true)
+        }
     }
 
     React.useEffect(() => {
@@ -21,30 +28,6 @@ const PostList = ({history}) => {
 
     return(
         <div>
-            <div id='header'>
-                <div id='logo' onClick={() => history.push('/')} style={{cursor:'pointer'}}>
-                    LOGO
-                </div>
-                <div id='userinfo'>
-                {JSON.parse(localStorage.getItem('USER_INFO')).is_login===true?
-                <div>
-                    <p>{JSON.parse(localStorage.getItem('USER_INFO')).nickname}</p>
-                    <a href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://localhost:3000/logout'>
-                        <div id='login-btn'>
-                            로그아웃        
-                        </div>
-                    </a>
-                </div>
-                :
-                <a href='https://kauth.kakao.com/oauth/authorize?client_id=20887ce0003dfa62635c435e177fee15&redirect_uri=http://localhost:3000/oauth&response_type=code'>
-                    <div id='login-btn'>
-                        로그인        
-                    </div>
-                </a>
-                }
-                    
-                </div>
-            </div>
             <div id='content'>
                 <div className='ad-section'>
                     1
@@ -65,6 +48,7 @@ const PostList = ({history}) => {
                             {isLoading?
                             'loading'
                             :
+                            isData?
                             post.map((element, index) => {
                                 return(
                                     <div key={element.post_id} onClick={() => history.push(`/posts/${element.post_id}`)} className='post_list_item'>
@@ -72,6 +56,8 @@ const PostList = ({history}) => {
                                     </div>
                                 )
                             })
+                            :
+                            'nothing'
                         }
                         </div>
                     </div>
@@ -87,7 +73,7 @@ const PostList = ({history}) => {
             :
             null
             }
-            
+            <LoginModal/>
         </div>
     )
 }

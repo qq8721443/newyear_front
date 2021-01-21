@@ -19,19 +19,14 @@ const Oauth = ({location, history}) => {
         .then(res => res.json())
         .then(json => {
             console.log(JSON.stringify(json))
-            if(getCookie('accesstoken') === null || getCookie('accesstoken') === 'undefined'){
-                setCookie("accesstoken", json.res.access_token)
-            }
-            if(getCookie('refreshtoken') === null || getCookie('refreshtoken') === 'undefined'){
-                setCookie("refreshtoken", json.res.refresh_token)
-            }
+            
             fetch('http://localhost:8000/main/user_info/',{
                 method:'POST',
                 headers:{
                     'X-CSRFToken':`${getCookie('csrftoken')}`
                 },
                 body:JSON.stringify({
-                    access_token:getCookie("accesstoken")
+                    access_token:json.res.access_token
                 }),
                 credentials:'include'
             })
@@ -39,8 +34,33 @@ const Oauth = ({location, history}) => {
             .then(json => {
                 alert(JSON.stringify(json))
                 console.log(JSON.stringify(json))
-                localStorage.setItem('USER_INFO', JSON.stringify({'user_id':json.id, 'nickname':json.properties.nickname, 'is_login':true}))
-                history.push('/')
+                console.log(json.id)
+                fetch('http://localhost:8000/main/signup/', {
+                    method:'POST',
+                    headers:{
+                        'X-CSRFToken':getCookie('csrftoken')
+                    },
+                    body:JSON.stringify({
+                        exist_check:true,
+                        kakao_user_id:json.id
+                    }),
+                    credentials:'include'
+                })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.already){
+                        //토큰 저장
+                        setCookie('accesstoken', json.access_token)
+                        setCookie('refreshtoken', json.refresh_token)
+                        localStorage.setItem('USER_INFO',JSON.stringify({'nickname':json.nickname, 'email':json.email, 'is_login':true}))
+                        history.push('/')
+                    } else {
+                        history.push({
+                            pathname:'/register',
+                            state:{kakao_user_id:json.id},
+                        })
+                    }
+                })
             })
             .catch(e => console.log(e))
         })
@@ -55,7 +75,7 @@ const Oauth = ({location, history}) => {
             코드 : {query.code}
         </div>
         <div>
-            액세스 토큰 : {getCookie("accesstoken")}
+            액세스 토큰 : {}
         </div>
         </>
     )

@@ -8,10 +8,14 @@ import PostList from './pages/postlist';
 import DetailPage from './pages/detailpage';
 import CreatePost from './pages/createPost';
 import Register from './pages/register';
+import Header from './components/header';
+import UserInfo from './pages/userInfoPage';
 
 function App() {
+  
   return(
     <>
+      <Route path='/' component={Header}/>
       <Route path='/' exact component={Main}/>
       <Route path='/oauth' exact component={Oauth}/>
       <Route path='/logout' exact component={Logout}/>
@@ -19,6 +23,7 @@ function App() {
       <Route path='/posts/:post_id' exact component={DetailPage}/>
       <Route path='/create' exact component={CreatePost}/>
       <Route path='/register' exact component={Register}/>
+      <Route path='/user_info' exact component={UserInfo}/>
     </>
   )
 }
