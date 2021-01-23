@@ -6,24 +6,11 @@ import PostModal from '../components/postModal';
 // import {Link} from 'react-router-dom';
 
 const Main = ({history}) => {
-    const [isHopeLoading, setHopeLoading] = React.useState(true)
     const [isPostLoading, setPostLoading] = React.useState(true)
-    const [hope, setHope] = React.useState('')
     const [post, setPost] = React.useState('')
 
 
     React.useEffect(() => {
-        async function getHope() {
-            const res = await fetch('http://localhost:8000/main/hopes/', {
-                credentials: 'include'
-            });
-            const hope_res = await res.json()
-            console.log(JSON.stringify(hope_res.res))
-            setHope(hope_res.res)
-            setHopeLoading(false)
-        }
-        getHope()
-
         async function getPost() {
             const res = await fetch('http://localhost:8000/main/posts/', {
                 credentials:'include'
@@ -62,7 +49,7 @@ const Main = ({history}) => {
                 </div>
                 <div id='con-section'>
                     <div id='banner'>
-                        <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 성취기록':'로그인이 필요합니다'}</span>
+                        <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 목표 달성률':'로그인이 필요합니다'}</span>
                         <div style={{position:'relative', width:'100%', height:'20px', backgroundColor:'#f2f2f2', borderRadius:'10px', marginTop:'10px'}}>
                             <div style={{position:'relative', width:'50%', height:'100%', backgroundColor:'mediumaquamarine', borderRadius:'10px', textAlign:'center'}}>
                                 50%
@@ -70,7 +57,7 @@ const Main = ({history}) => {
                         </div>
                         <div style={{backgroundColor:'white', display:'flex', gap:'10px', marginTop:'10px'}}>
                             <div style={{flex:1, backgroundColor:'#f2f2f2', height:'25vh', boxSizing:'border-box', borderRadius:'10px', padding:'10px'}}>
-                                <span style={{fontSize:'16px', fontWeight:'bold', display:'block'}}>최종 달성률</span><br/>
+                                <span style={{fontSize:'16px', fontWeight:'bold', display:'block'}}>진행중인 목표</span><br/>
                                 <span>85% 성공 |</span>
                                 <span> 👏 x 135</span>
                                 <div style={{position:'relative', width:'100%', height:'20px', backgroundColor:'#fff', borderRadius:'10px'}}>
@@ -104,22 +91,7 @@ const Main = ({history}) => {
                         <div className='thumb-item1'>
                             <p className='thumb-title'>인기있는 목표</p>
                             <div id='hope-container'>
-                                {isHopeLoading?
-                                'loading'
-                            :
-                            hope.map((element, index) => {
-                                return(
-                                    <div key={index} className='hope-list'>
-                                        <div className='hope-list-item1'>
-                                            {element.title}
-                                        </div>
-                                        <div className='hope-list-item2'>
-                                            {element.likes}
-                                        </div>
-                                    </div>
-                                )
-                            })
-                            }
+                                
                             </div>
                         </div>
                         <div className='thumb-item2'>

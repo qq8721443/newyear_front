@@ -9,23 +9,11 @@ const DetailPage = ({history, match}) => {
     const [post, setPost] = React.useState('')
     const [isPostLoading, setPostLoading] = React.useState(true)
     const [isLoading, setLoading] = React.useState(true)
+    const [isAuthor, setAuthor] = React.useState(false)
 
-    
 
     React.useEffect(() => {
         console.log("useEffect 실행")
-
-        function getComment(){
-            console.log('comment')
-            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
-                credentials:'include'
-            })
-            .then(res => res.json())
-            .then(json => {
-                setComment(json)
-                setLoading(false)
-            })
-        }
     
         function getPost(){
             console.log('post')
@@ -40,13 +28,10 @@ const DetailPage = ({history, match}) => {
             })
         }
 
-        if(isLoading){
-            getComment()
-        }
         if (isPostLoading){
             getPost()
         }
-    }, [isLoading, isPostLoading, match.params.post_id, post])
+    }, [ isPostLoading, match.params.post_id, post])
 
     function postComment() {
         console.log('post comment 시작')
@@ -76,6 +61,68 @@ const DetailPage = ({history, match}) => {
         }
     }
 
+    React.useLayoutEffect(() => {
+        function getAuth(){
+            fetch('http://localhost:8000/main/user_check/', {
+                method:'POST',
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken')
+                },
+                body:JSON.stringify({
+                    post_id:match.params.post_id,
+                    access_token:getCookie('accesstoken')
+                }),
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                if(json.error === 'Signature has expired'){
+                    alert('Signature has expired')
+                    // refresh token 확인 후 유효하면 access token 재발급
+                }
+                if(json.is_author){
+                    setAuthor(true)
+                }
+            })
+        }
+
+        function getComment(){
+            console.log('comment')
+            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                setComment(json)
+                setLoading(false)
+            })
+        }
+
+        getAuth()
+        if(isLoading){
+            getComment()
+        }
+    }, [isLoading, match.params.post_id])
+
+    function deletePost(){
+        const answer = window.confirm("정말 삭제하시겠습니까?")
+        if(answer){
+            fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
+                method:'DELETE',
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken')
+                },
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                alert(JSON.stringify(json))
+                history.push('/')
+            })
+            .catch(e => console.log(e))
+        }
+    }
+
     return(
         <div>
             <div id='content' style={{justifyContent:'center'}}>
@@ -89,11 +136,29 @@ const DetailPage = ({history, match}) => {
                         <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{isPostLoading?'loading':post.res[0].created_dt.split('T')[0]}</span>
                         <span>{isPostLoading?'loading':post.res[0].views}</span>
                     </div>
+                    {isAuthor?
+                        <div id='options' style={{position:'relative', width:'100%', height:'30px', background:'orange', textAlign:'right'}}>
+                            <span onClick={() => history.push({
+                                pathname:'/modify',
+                                state:{test:post.res[0]},
+                            })}>수정</span>
+                            <span onClick={() => deletePost()}>삭제</span>
+                            <span onClick={() => alert('성공')}>성공</span>
+                            <span onClick={() => alert('실패')}>실패</span>
+                        </div>
+                    :
+                        null
+                    }
+                    
                     <div id='post_content' style={{marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px'}}>
                         {isPostLoading?
                         'loading'
                         :
                         post.res[0].content}
+                        {isAuthor?
+                        'author'
+                    :
+                    'not author'}
                     </div>
                     <div id='post_comment'>
                         <div id='comment_input' style={{position:'relative', width:'100%', height:'50px', backgroundColor:'thistle', display:'flex', alignItems:'center'}}>

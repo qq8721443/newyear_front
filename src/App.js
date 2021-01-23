@@ -10,6 +10,7 @@ import CreatePost from './pages/createPost';
 import Register from './pages/register';
 import Header from './components/header';
 import UserInfo from './pages/userInfoPage';
+import Modify from './pages/modifypost';
 
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
       <Route path='/create' exact component={CreatePost}/>
       <Route path='/register' exact component={Register}/>
       <Route path='/user_info' exact component={UserInfo}/>
+      <Route path='/modify' exact component={Modify}/>
     </>
   )
 }
