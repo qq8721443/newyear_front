@@ -13,19 +13,6 @@ const Main = ({history}) => {
 
     React.useEffect(() => {
         console.info('use effect 시작')
-        async function getPost() {
-            const res = await fetch('http://localhost:8000/main/posts/', {
-                credentials:'include'
-            })
-            const post_res = await res.json()
-            if(post_res.res === "there's no data"){
-                setPost('none')
-            } else {
-                setPost(post_res)
-                // setPostLoading(false)
-            }
-        }
-        getPost()
 
         if(getCookie('csrftoken') === null){
           async function getCsrfToken() {
@@ -55,10 +42,24 @@ const Main = ({history}) => {
           })
           .then(res => res.json())
           .then(json => {
-            alert(JSON.stringify(json))
+            console.log(JSON.stringify(json))
             setInfo(json)
           })
           .catch(e => console.log(e))
+
+          async function getPost() {
+            const res = await fetch('http://localhost:8000/main/posts/', {
+                credentials:'include'
+            })
+            const post_res = await res.json()
+            if(post_res.res === "there's no data"){
+                setPost('none')
+            } else {
+                setPost(post_res)
+                // setPostLoading(false)
+            }
+        }
+        getPost()
 
           return() => {
               console.info('use layout effect 끝')
@@ -127,7 +128,7 @@ const Main = ({history}) => {
                         <div className='thumb-item2'>
                             <p className='thumb-title'>최신 글</p>
                             <p className='more-btn' onClick={() => history.push('/posts')}>+더보기</p>
-                            {post === ''?
+                            {post === ''|| post === 'none'?
                             'loading'
                             :
                             post.map((element, index) => {

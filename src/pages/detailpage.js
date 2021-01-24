@@ -98,11 +98,25 @@ const DetailPage = ({history, match}) => {
             })
         }
 
+        function getPost(){
+            console.log('post')
+            fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                setPost(json)
+                console.log(post)
+                setPostLoading(false)
+            })
+        }
+        getPost()
+
         getAuth()
         if(isLoading){
             getComment()
         }
-    }, [isLoading, match.params.post_id])
+    }, [isLoading, match.params.post_id, post])
 
     function deletePost(){
         const answer = window.confirm("정말 삭제하시겠습니까?")
@@ -121,6 +135,36 @@ const DetailPage = ({history, match}) => {
             })
             .catch(e => console.log(e))
         }
+    }
+
+    function changeToSuccess(){
+        fetch(`http://localhost:8000/main/change_success/${match.params.post_id}/`,{
+            method:'PATCH',
+            headers:{
+                'X-CSRFToken':getCookie('csrftoken')
+            },
+            credentials:'include'
+        })
+        .then(res => res.json())
+        .then(json => {
+            alert(JSON.stringify(json))
+        })
+        .catch(e => console.log(e))
+    }
+    
+    function changeToFail(){
+        fetch(`http://localhost:8000/main/change_fail/${match.params.post_id}/`, {
+            method:'PATCH',
+            headers:{
+                'X-CSRFToken':getCookie('csrftoken')
+            },
+            credentials:'include'
+        })
+        .then( res => res.json())
+        .then(json => {
+            alert(JSON.stringify(json))
+        })
+        .catch(e => console.log(e))
     }
 
     return(
@@ -143,8 +187,15 @@ const DetailPage = ({history, match}) => {
                                 state:{test:post.res[0]},
                             })}>수정</span>
                             <span onClick={() => deletePost()}>삭제</span>
-                            <span onClick={() => alert('성공')}>성공</span>
-                            <span onClick={() => alert('실패')}>실패</span>
+                            {post.res[0].is_success === true || post.res[0].is_fail === true?
+                            null
+                            :
+                            <>
+                            <span onClick={() => changeToSuccess()}>성공</span>
+                            <span onClick={() => changeToFail()}>실패</span>
+                            </>
+                        }
+                            
                         </div>
                     :
                         null
