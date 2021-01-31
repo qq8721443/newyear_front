@@ -1,45 +1,22 @@
-import {getCookie} from './cookies';
+import {getCookie} from '../components/cookies';
 
-function tokenCheck(){
-    const accessToken = getCookie('accesstoken');
-    if(accessToken === null){
-        return false;
+const tokenCheck = () => {
+    if(getCookie('accesstoken') === null){
+        localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
     } else {
-        fetch('http://localhost:8000/main/token_check/', {
-            method:'POST',
+        fetch('http://localhost:8000/main/expired_check/',{
+            method:'GET',
             headers:{
-                'X-CSRFToken':getCookie('csrftoken')
+                'access-token':getCookie('accesstoken'),
+                'refresh-token':getCookie('refreshtoken')
             },
-            body:JSON.stringify({
-                access_token:accessToken
-            }),
             credentials:'include'
         })
         .then(res => res.json())
         .then(json => {
-            if(json.id === JSON.parse(localStorage.getItem('USER_INFO')).user_id && json.expires_in > 0){
-                return true;
-            } else {
-                if(getCookie('csrftoken') === null){
-                    return false;   
-                } else {
-                    fetch('http://localhost:8000/main/refresh_token/', {
-                        method:'POST',
-                        headers:{
-                            'X-CSRFToken':getCookie('csrftoken')
-                        },
-                        body:JSON.stringify({
-                            refresh_token:getCookie('refreshtoken')
-                        }),
-                        credentials:'include'
-                    })
-                    .then(res => res.json())
-                    .then(json => {
-                        return true;
-                    })
-                }
-            }
+            console.log(json.message)
         })
+        .catch(e => console.log(e))
     }
 }
 

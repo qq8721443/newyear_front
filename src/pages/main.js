@@ -3,6 +3,7 @@ import '../css/maincss.css';
 import {getCookie} from '../components/cookies';
 import LoginModal from '../components/loginModal';
 import PostModal from '../components/postModal';
+import tokenCheck from '../components/tokenCheck';
 // import {Link} from 'react-router-dom';
 
 const Main = ({history}) => {
@@ -10,9 +11,14 @@ const Main = ({history}) => {
     const [post, setPost] = React.useState('')
     const [info, setInfo] = React.useState('')
 
+    if(localStorage.getItem('USER_INFO') === null){
+        localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
+    }
 
     React.useEffect(() => {
         console.info('use effect 시작')
+
+        tokenCheck()
 
         if(getCookie('csrftoken') === null){
           async function getCsrfToken() {
@@ -23,6 +29,13 @@ const Main = ({history}) => {
             document.cookie = `csrftoken=${data.csrfToken}`
           }
           getCsrfToken()
+        }
+
+        if(getCookie('accesstoken') === null){
+            alert('access_token 없음')
+            if(getCookie('refreshtoken') === null){
+                alert('refresh_token 없음')
+            }
         }
         
         return() => {
@@ -80,12 +93,14 @@ const Main = ({history}) => {
                     <div id='banner'>
                         <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 목표 달성률':'로그인이 필요합니다'}</span>
                         <div style={{position:'relative', width:'100%', height:'20px', backgroundColor:'#f2f2f2', borderRadius:'10px', marginTop:'10px'}}>
-                            <div style={{position:'relative', width:`${info===''?null:info.rate.success+'%'}`, height:'100%', backgroundColor:'mediumaquamarine', borderRadius:'10px', textAlign:'center'}}>
-                                {info===''?'loading':info.rate.success+'%'}
+                            <div style={{position:'relative', width:`${info===''?null:info.rate.success+'%'}`, height:'100%', backgroundColor:`${getCookie('accesstoken')!==null?'mediumaquamarine':'#f2f2f2'}`, borderRadius:'10px', textAlign:'center'}}>
+                                {info===''?null:info.rate.success+'%'}
                             </div>
                         </div>
                         <div style={{backgroundColor:'white', display:'flex', gap:'10px', marginTop:'10px'}}>
                             <div style={{flex:1, backgroundColor:'#f2f2f2', height:'25vh', boxSizing:'border-box', borderRadius:'10px', padding:'10px'}}>
+                                {getCookie('accesstoken') !== null?
+                                <>
                                 <span style={{fontSize:'16px', fontWeight:'bold', display:'block'}}>진행중인 목표</span>
                                 <span style={{position:'relative'}}>{info===''?'loading':info.nowposttitle}</span>
                                 <span> | 👏 x {info===''?null:info.claps} </span><br/>
@@ -96,27 +111,51 @@ const Main = ({history}) => {
                                         {info===''?null:`${info.rate.remain}%`}
                                     </div>
                                 </div>
+                                </>
+                                :
+                                null
+                                }
+                                
                             </div>
                             <div style={{flex:1, backgroundColor:'#f2f2f2', height:'25vh', boxSizing:'border-box', borderRadius:'10px', padding:'10px', display:'flex', justifyContent:'center', alignItems:'center', position:'relative'}}>
+                                {getCookie('accesstoken') !== null?
+                                <>
                                 <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
-                                    <span>전체 목표</span>
-                                    <span style={{display:'block', fontSize:'36px'}}>{info===''?null:info.count.all}개</span>
-                                </div>
-                                <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
-                                    <span>성공 목표</span>
-                                    <span style={{display:'block', fontSize:'36px', color:'green'}}>{info===''?null:info.count.success}개</span>
-                                </div>
-                                <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
-                                    <span>진행 목표</span>
-                                    <span style={{display:'block', fontSize:'36px', color:'red'}}>{info===''?null:info.count.ongoing}개</span>
-                                </div>
-                                <div style={{flex:1, fontSize:'14px', textAlign:'center'}}>
-                                    <span>나의 응원</span>
-                                    <span style={{display:'block', fontSize:'36px', color:'orange'}}>17개</span>
-                                </div>
-                                <div style={{position:'absolute', right:'5px', bottom:'5px', cursor:'pointer'}} onClick={() => openPostModal()}>자세히 보기</div>
+                                <span>전체 목표</span>
+                                <span style={{display:'block', fontSize:'36px'}}>{info===''?null:info.count.all}개</span>
+                            </div>
+                            <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
+                                <span>성공 목표</span>
+                                <span style={{display:'block', fontSize:'36px', color:'green'}}>{info===''?null:info.count.success}개</span>
+                            </div>
+                            <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
+                                <span>진행 목표</span>
+                                <span style={{display:'block', fontSize:'36px', color:'red'}}>{info===''?null:info.count.ongoing}개</span>
+                            </div>
+                            <div style={{flex:1, fontSize:'14px', textAlign:'center'}}>
+                                <span>나의 응원</span>
+                                <span style={{display:'block', fontSize:'36px', color:'orange'}}>17개</span>
+                            </div>
+                            <div style={{position:'absolute', right:'5px', bottom:'5px', cursor:'pointer'}} onClick={() => openPostModal()}>자세히 보기</div>
+                            </>
+                            :
+                            null
+                                }
+                                
                             </div>
                         </div>
+                        {getCookie('accesstoken') !== null?
+                        null
+                        :
+                        <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}>
+                            <div id='user_info_blind' style={{width:'100%', height:'100%', background:'white', opacity:0.7}}></div>
+                                <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
+                                    로그인이 필요합니다.
+                                <div onClick={() => document.getElementById('login_modal').classList.remove('hidden')} style={{width:'100px', height:'40px', background:'mediumaquamarine', borderRadius:'10px', display:'flex', justifyContent:'center', alignItems:'center', color:'#fff', cursor:'pointer'}}>로그인</div>
+                            </div>                            
+                        </div>
+                        }
+                        
                     </div>
                     <div id='thumb'>
                         <div className='thumb-item1'>

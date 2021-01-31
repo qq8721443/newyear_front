@@ -7,39 +7,23 @@ const DetailPage = ({history, match}) => {
     const [comment_input, setComInput] = React.useState('')
     const [comment, setComment] = React.useState('')
     const [post, setPost] = React.useState('')
-    const [isPostLoading, setPostLoading] = React.useState(true)
-    const [isLoading, setLoading] = React.useState(true)
-    const [isAuthor, setAuthor] = React.useState(false)
+    // const [isPostLoading, setPostLoading] = React.useState(true)
+    // const [isLoading, setLoading] = React.useState(true)
+    const [isAuthor, setAuthor] = React.useState('')
 
 
     React.useEffect(() => {
         console.log("useEffect 실행")
     
-        function getPost(){
-            console.log('post')
-            fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
-                credentials:'include'
-            })
-            .then(res => res.json())
-            .then(json => {
-                setPost(json)
-                console.log(post)
-                setPostLoading(false)
-            })
-        }
-
-        if (isPostLoading){
-            getPost()
-        }
-    }, [ isPostLoading, match.params.post_id, post])
+    }, [comment])
 
     function postComment() {
         console.log('post comment 시작')
+        setComment('')
         const valid_check = document.getElementById('_commentinput').value
         if(valid_check === ''){
             alert('댓글을 입력해주세요')
         } else {
-            setLoading(true)
             fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
                 method:'POST',
                 headers:{
@@ -55,7 +39,6 @@ const DetailPage = ({history, match}) => {
             .then(json => {
                 setComInput('')
                 console.log(json)
-                setLoading(false)
                 console.log('post comment 종료')
             })
         }
@@ -82,6 +65,8 @@ const DetailPage = ({history, match}) => {
                 }
                 if(json.is_author){
                     setAuthor(true)
+                } else {
+                    setAuthor(false)
                 }
             })
         }
@@ -94,29 +79,32 @@ const DetailPage = ({history, match}) => {
             .then(res => res.json())
             .then(json => {
                 setComment(json)
-                setLoading(false)
             })
         }
 
         function getPost(){
-            console.log('post')
             fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
-                credentials:'include'
+                credentials:'include',
+                headers:{
+                    'access-token':getCookie('accesstoken')
+                }
             })
             .then(res => res.json())
             .then(json => {
                 setPost(json)
                 console.log(post)
-                setPostLoading(false)
             })
         }
-        getPost()
-
-        getAuth()
-        if(isLoading){
+        if(post===''){
+            getPost()
+        }
+        if(comment===''){
             getComment()
         }
-    }, [isLoading, match.params.post_id, post])
+        if(isAuthor===''){
+            getAuth()
+        }
+    }, [comment, match.params.post_id, post, isAuthor])
 
     function deletePost(){
         const answer = window.confirm("정말 삭제하시겠습니까?")
@@ -172,13 +160,13 @@ const DetailPage = ({history, match}) => {
             <div id='content' style={{justifyContent:'center'}}>
                 <div id='post' style={{backgroundColor:'#fff', position:'relative', width:'800px', textAlign:'center'}}>
                     <div id='post_title' style={{position:'relative', height:'100px', fontWeight:'bold', fontSize:'44px', borderBottom:'2px solid #f2f2f2', marginTop:'10px', color:'gray'}}>
-                        {isPostLoading?
+                        {post ===''?
                         'loading'
                         :
                         post.res[0].title}
-                        <span style={{position:'absolute', left:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{isPostLoading?'loading':post.res[0].author}</span>
-                        <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{isPostLoading?'loading':post.res[0].created_dt.split('T')[0]}</span>
-                        <span>{isPostLoading?'loading':post.res[0].views}</span>
+                        <span style={{position:'absolute', left:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].author}</span>
+                        <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].created_dt.split('T')[0]}</span>
+                        <span>{post===''?'loading':post.res[0].views}</span>
                     </div>
                     {isAuthor?
                         <div id='options' style={{position:'relative', width:'100%', height:'30px', background:'orange', textAlign:'right'}}>
@@ -187,13 +175,15 @@ const DetailPage = ({history, match}) => {
                                 state:{test:post.res[0]},
                             })}>수정</span>
                             <span onClick={() => deletePost()}>삭제</span>
-                            {post.res[0].is_success === true || post.res[0].is_fail === true?
+                            {post!==''?post.res[0].is_success === true || post.res[0].is_fail === true?
                             null
                             :
                             <>
                             <span onClick={() => changeToSuccess()}>성공</span>
                             <span onClick={() => changeToFail()}>실패</span>
                             </>
+                            :
+                            null
                         }
                             
                         </div>
@@ -202,7 +192,7 @@ const DetailPage = ({history, match}) => {
                     }
                     
                     <div id='post_content' style={{marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px'}}>
-                        {isPostLoading?
+                        {post===''?
                         'loading'
                         :
                         post.res[0].content}
@@ -210,6 +200,7 @@ const DetailPage = ({history, match}) => {
                         'author'
                     :
                     'not author'}
+                    <span style={{position:'absolute'}}>{post===''?'loading':(post.is_liked===true?'좋아요 누름':'좋아요 안누름')}</span>
                     </div>
                     <div id='post_comment'>
                         <div id='comment_input' style={{position:'relative', width:'100%', height:'50px', backgroundColor:'thistle', display:'flex', alignItems:'center'}}>
@@ -228,7 +219,7 @@ const DetailPage = ({history, match}) => {
                         </div>
                         <div id='comment_list' style={{backgroundColor:'white'}}>
                             <div style={{position:'relative', width:'100%', textAlign:'left', paddingLeft:'10px'}}>댓글</div>
-                            {isLoading?
+                            {comment===''?
                             'loading'
                             :
                             comment.res === undefined?
