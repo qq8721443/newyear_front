@@ -73,7 +73,7 @@ const DetailPage = ({history, match}) => {
         console.log("useEffect 실행")
         function getComment(){
             console.log('comment')
-            fetch(`http://http://qq8721443.pythonanywhere.com/main/comments/${match.params.post_id}/`, {
+            fetch(`http://qq8721443.pythonanywhere.com/main/comments/${match.params.post_id}/`, {
                 credentials:'include',
                 headers:{
                     'access-token':getCookie('accesstoken')
@@ -98,7 +98,7 @@ const DetailPage = ({history, match}) => {
         if(valid_check === ''){
             alert('댓글을 입력해주세요')
         } else {
-            fetch(`http://http://qq8721443.pythonanywhere.com/main/comments/${match.params.post_id}/`, {
+            fetch(`http://qq8721443.pythonanywhere.com/main/comments/${match.params.post_id}/`, {
                 method:'POST',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken'),
@@ -122,7 +122,7 @@ const DetailPage = ({history, match}) => {
 
     React.useLayoutEffect(() => {
         function getAuth(){
-            fetch('http://http://qq8721443.pythonanywhere.com/main/user_check/', {
+            fetch('http://qq8721443.pythonanywhere.com/main/user_check/', {
                 method:'POST',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken'),
@@ -149,7 +149,7 @@ const DetailPage = ({history, match}) => {
         }
 
         function getPost(){
-            fetch(`http://http://qq8721443.pythonanywhere.com/main/posts/${match.params.post_id}/`, {
+            fetch(`http://qq8721443.pythonanywhere.com/main/posts/${match.params.post_id}/`, {
                 credentials:'include',
                 headers:{
                     'access-token':getCookie('accesstoken')
@@ -176,7 +176,7 @@ const DetailPage = ({history, match}) => {
     function deletePost(){
         const answer = window.confirm("정말 삭제하시겠습니까?")
         if(answer){
-            fetch(`http://http://qq8721443.pythonanywhere.com/main/posts/${match.params.post_id}/`, {
+            fetch(`http://qq8721443.pythonanywhere.com/main/posts/${match.params.post_id}/`, {
                 method:'DELETE',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken')
@@ -193,7 +193,7 @@ const DetailPage = ({history, match}) => {
     }
 
     function changeToSuccess(){
-        fetch(`http://http://qq8721443.pythonanywhere.com/main/change_success/${match.params.post_id}/`,{
+        fetch(`http://qq8721443.pythonanywhere.com/main/change_success/${match.params.post_id}/`,{
             method:'PATCH',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken')
@@ -208,7 +208,7 @@ const DetailPage = ({history, match}) => {
     }
     
     function changeToFail(){
-        fetch(`http://http://qq8721443.pythonanywhere.com/main/change_fail/${match.params.post_id}/`, {
+        fetch(`http://qq8721443.pythonanywhere.com/main/change_fail/${match.params.post_id}/`, {
             method:'PATCH',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken')
@@ -223,7 +223,7 @@ const DetailPage = ({history, match}) => {
     }
 
     const likePost = () => {
-        fetch(`http://http://qq8721443.pythonanywhere.com/main/like_post/${match.params.post_id}/`, {
+        fetch(`http://qq8721443.pythonanywhere.com/main/like_post/${match.params.post_id}/`, {
             method:'GET',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken'),
@@ -239,7 +239,7 @@ const DetailPage = ({history, match}) => {
     }
 
     const deleteComment = (commentId) => {
-        fetch(`http://http://qq8721443.pythonanywhere.com/main/comments/delete/${commentId}/`, {
+        fetch(`http://qq8721443.pythonanywhere.com/main/comments/delete/${commentId}/`, {
             method:'delete',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken'),

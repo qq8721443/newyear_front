@@ -14,7 +14,7 @@ const LoginModal = () => {
         if(checkEmail()){
             alert('이메일 형식이 잘못되었습니다.')
         } else {
-            fetch('http://http://qq8721443.pythonanywhere.com/main/signup/', {
+            fetch('http://qq8721443.pythonanywhere.com/main/signup/', {
                 method:'POST',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken')
@@ -55,7 +55,7 @@ const LoginModal = () => {
         if(!checkEmail(ins[0].value)){
             alert('이메일 형식이 잘못되었습니다.')
         } else {
-            fetch('http://http://qq8721443.pythonanywhere.com/main/signin/', {
+            fetch('http://qq8721443.pythonanywhere.com/main/signin/', {
                 method:'POST',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken')

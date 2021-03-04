@@ -6,7 +6,7 @@ const Oauth = ({location, history}) => {
     const query = queryString.parse(location.search)
 
     useEffect(() => {
-        fetch('http://http://qq8721443.pythonanywhere.com/main/oauth/', {
+        fetch('http://qq8721443.pythonanywhere.com/main/oauth/', {
             method:'POST',
             headers:{
                 'X-CSRFToken':`${getCookie('csrftoken')}`
@@ -20,7 +20,7 @@ const Oauth = ({location, history}) => {
         .then(json => {
             console.log(JSON.stringify(json))
             
-            fetch('http://http://qq8721443.pythonanywhere.com/main/user_info/',{
+            fetch('http://qq8721443.pythonanywhere.com/main/user_info/',{
                 method:'POST',
                 headers:{
                     'X-CSRFToken':`${getCookie('csrftoken')}`
@@ -35,7 +35,7 @@ const Oauth = ({location, history}) => {
                 alert(JSON.stringify(json))
                 console.log(JSON.stringify(json))
                 console.log(json.id)
-                fetch('http://http://qq8721443.pythonanywhere.com/main/signup/', {
+                fetch('http://qq8721443.pythonanywhere.com/main/signup/', {
                     method:'POST',
                     headers:{
                         'X-CSRFToken':getCookie('csrftoken')

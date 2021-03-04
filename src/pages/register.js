@@ -7,7 +7,7 @@ const Register = ({location, history}) => {
 
     const register_done = () => {
         console.log(location.state.kakao_user_id)
-        fetch('http://http://qq8721443.pythonanywhere.com/main/signup/', {
+        fetch('http://qq8721443.pythonanywhere.com/main/signup/', {
             method:'POST',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken')

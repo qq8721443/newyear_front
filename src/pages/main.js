@@ -24,7 +24,7 @@ const Main = ({history}) => {
 
         if(getCookie('csrftoken') === null){
           async function getCsrfToken() {
-              const response = await fetch(`http://http://qq8721443.pythonanywhere.com/main/get_csrf/`, {
+              const response = await fetch(`http://qq8721443.pythonanywhere.com/main/get_csrf/`, {
                 credentials: 'include',
               });
               const data = await response.json();
@@ -51,7 +51,7 @@ const Main = ({history}) => {
           tokenCheck()
           console.log(`access_token : ${getCookie('accesstoken')}`)
           if(getCookie('accesstoken') !== null){
-            fetch('http://http://qq8721443.pythonanywhere.com/main/test/', {
+            fetch('http://qq8721443.pythonanywhere.com/main/test/', {
                 method:'GET',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken'),
@@ -68,7 +68,7 @@ const Main = ({history}) => {
         }
 
         async function getPost() {
-            const res = await fetch('http://http://qq8721443.pythonanywhere.com/main/posts/', {
+            const res = await fetch('http://qq8721443.pythonanywhere.com/main/posts/', {
                 credentials:'include'
             })
             const post_res = await res.json()
@@ -82,7 +82,7 @@ const Main = ({history}) => {
         getPost()
 
         const getHotPost = () => {
-            fetch('http://http://qq8721443.pythonanywhere.com/main/posts/hot/', {
+            fetch('http://qq8721443.pythonanywhere.com/main/posts/hot/', {
                 method:'GET',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken')

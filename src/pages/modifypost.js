@@ -25,7 +25,7 @@ const ModifyPost = ({history, location}) => {
     })
 
     async function modifyPost(){
-        const res = await fetch(`http://http://qq8721443.pythonanywhere.com/main/posts/${location.state.test.post_id}/`, {
+        const res = await fetch(`http://qq8721443.pythonanywhere.com/main/posts/${location.state.test.post_id}/`, {
             method:'PATCH',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken')

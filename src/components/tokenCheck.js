@@ -6,7 +6,7 @@ const tokenCheck = () => {
         deleteCookie('refreshtoken')
         localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
     } else {
-        fetch('http://http://qq8721443.pythonanywhere.com/main/expired_check/',{
+        fetch('http://qq8721443.pythonanywhere.com/main/expired_check/',{
             method:'GET',
             headers:{
                 'access-token':getCookie('accesstoken'),
