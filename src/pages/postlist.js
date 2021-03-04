@@ -11,7 +11,7 @@ const PostList = ({history}) => {
     const [page, setPage] = React.useState(1)
 
     async function getPost() {
-        const res = await fetch('http://localhost:8000/main/posts/', {
+        const res = await fetch('http://http://qq8721443.pythonanywhere.com/main/posts/', {
             credentials:'include'
         })
         const post_res = await res.json()
@@ -31,7 +31,7 @@ const PostList = ({history}) => {
         const FetchOtherPost = () => {
             setFetching(true)
 
-            fetch(`http://localhost:8000/main/posts/extra/${page+1}/`, {
+            fetch(`http://http://qq8721443.pythonanywhere.com/main/posts/extra/${page+1}/`, {
                 method:'GET',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken')

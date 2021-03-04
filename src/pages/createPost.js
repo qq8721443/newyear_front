@@ -25,7 +25,7 @@ const CreatePost = ({history}) => {
     }
 
     async function postPost(){
-        const res = await fetch('http://localhost:8000/main/posts/', {
+        const res = await fetch('http://http://qq8721443.pythonanywhere.com/main/posts/', {
             method:'POST',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken'),
