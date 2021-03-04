@@ -10,15 +10,17 @@ const Main = ({history}) => {
     // const [isPostLoading, setPostLoading] = React.useState(true)
     const [post, setPost] = React.useState('')
     const [info, setInfo] = React.useState('')
+    const [hotPost, setHotPost] = React.useState('')
 
-    if(localStorage.getItem('USER_INFO') === null){
+
+    if(getCookie('accesstoken') === null){
         localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
     }
 
     React.useEffect(() => {
         console.info('use effect 시작')
 
-        tokenCheck()
+        
 
         if(getCookie('csrftoken') === null){
           async function getCsrfToken() {
@@ -45,22 +47,27 @@ const Main = ({history}) => {
 
       React.useLayoutEffect(() => {
           console.info('use layout effect 시작')
-          fetch('http://localhost:8000/main/test/', {
-              method:'GET',
-              headers:{
-                  'X-CSRFToken':getCookie('csrftoken'),
-                  'access-token':getCookie('accesstoken')
-              },
-              credentials:'include'
-          })
-          .then(res => res.json())
-          .then(json => {
-            console.log(JSON.stringify(json))
-            setInfo(json)
-          })
-          .catch(e => console.log(e))
+          console.log('token check 실행')
+          tokenCheck()
+          console.log(`access_token : ${getCookie('accesstoken')}`)
+          if(getCookie('accesstoken') !== null){
+            fetch('http://localhost:8000/main/test/', {
+                method:'GET',
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken'),
+                    'access-token':getCookie('accesstoken')
+                },
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(json => {
+                    console.log(JSON.stringify(json))
+                    setInfo(json)
+            })
+            .catch(e => console.log(e))
+        }
 
-          async function getPost() {
+        async function getPost() {
             const res = await fetch('http://localhost:8000/main/posts/', {
                 credentials:'include'
             })
@@ -74,6 +81,22 @@ const Main = ({history}) => {
         }
         getPost()
 
+        const getHotPost = () => {
+            fetch('http://localhost:8000/main/posts/hot/', {
+                method:'GET',
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken')
+                },
+                credentials:'include',
+            })
+            .then(res => res.json())
+            .then(json => {
+                setHotPost(json.res)
+                console.log(json.res)
+            })
+        }
+        getHotPost()
+
           return() => {
               console.info('use layout effect 끝')
           }
@@ -84,11 +107,8 @@ const Main = ({history}) => {
     }
     
     return(
-        <div>
+        <>
             <div id='content'>
-                <div className='ad-section'>
-                    1
-                </div>
                 <div id='con-section'>
                     <div id='banner'>
                         <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 목표 달성률':'로그인이 필요합니다'}</span>
@@ -134,7 +154,7 @@ const Main = ({history}) => {
                             </div>
                             <div style={{flex:1, fontSize:'14px', textAlign:'center'}}>
                                 <span>나의 응원</span>
-                                <span style={{display:'block', fontSize:'36px', color:'orange'}}>17개</span>
+                                <span style={{display:'block', fontSize:'36px', color:'orange'}}>{info===''?null:info.count.my_clap}개</span>
                             </div>
                             <div style={{position:'absolute', right:'5px', bottom:'5px', cursor:'pointer'}} onClick={() => openPostModal()}>자세히 보기</div>
                             </>
@@ -161,7 +181,18 @@ const Main = ({history}) => {
                         <div className='thumb-item1'>
                             <p className='thumb-title'>인기있는 목표</p>
                             <div id='hope-container'>
-                                
+                                {hotPost===''||hotPost==='none'?
+                                'loading'
+                            :
+                            
+                            hotPost.map((element, index) => {
+                                return(
+                                    <div key={index} onClick={() => history.push(`/posts/${element.post_id}`)} className='post-list'>
+                                        <span className='post-list-title'><p className='emp'>{element.title}</p>|{element.author}</span>
+                                        <span className='post-list-content'>{element.content.length > 40? element.content.slice(0,40).replace(' ', '')+'...':element.content.replace(/\n/g,'')}</span>
+                                    </div>
+                                )
+                            })}
                             </div>
                         </div>
                         <div className='thumb-item2'>
@@ -174,7 +205,7 @@ const Main = ({history}) => {
                                 return(
                                     <div key={index} onClick={() => history.push(`/posts/${element.post_id}`)} className='post-list'>
                                         <span className='post-list-title'><p className='emp'>{element.title}</p>|{element.author}</span>
-                                        <span className='post-list-content'>{element.content.length > 40? element.content.slice(0,40)+'...':element.content}</span>
+                                        <span className='post-list-content'>{element.content.length > 40? element.content.slice(0,40).replace(' ', '')+'...':element.content.replace(/\n/g,'')}</span>
                                     </div>    
                                 )
                             })
@@ -182,16 +213,13 @@ const Main = ({history}) => {
                         </div>
                     </div>
                 </div>
-                <div className='ad-section'>
-                    3
-                </div>
             </div>
             <div id='footer'>
                 footer
             </div>
             <LoginModal/>
             <PostModal/>
-        </div>
+        </>
     )
 }
 

@@ -1,33 +1,108 @@
 import React from 'react';
-import '../css/maincss.css'
+import '../css/maincss.css';
 import { getCookie } from '../components/cookies';
 import LoginModal from '../components/loginModal';
+import styled from 'styled-components';
+import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai';
+import {HiOutlinePencilAlt} from 'react-icons/hi';
+import {RiDeleteBack2Line, RiDeleteBinLine, RiCheckboxCircleLine} from 'react-icons/ri';
+
+const SideBtn = styled.div`
+        position:fixed;
+        top:30vh;
+        left:10vw;
+        width:100px;
+        height:100px;
+        background:white;
+        border-radius:50px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        cursor:pointer;
+    `
+
+const CommentInput = styled.textarea`
+        position:relative;
+        height:100px;
+        width:100%;
+        background:white;
+        border:1px solid #dddddd;
+        resize:none;
+        outline:none;
+        font-family:serif;
+        box-sizing:border-box;
+`
+
+const Button = styled.div`
+        position:relative;
+        width:100px;
+        height:50px;
+        background:mediumaquamarine;
+        border-radius:5px;
+        float:right;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        color:white;
+        font-size:18px;
+        cursor:pointer;
+`
+
+
+
+
+
 
 const DetailPage = ({history, match}) => {
     const [comment_input, setComInput] = React.useState('')
     const [comment, setComment] = React.useState('')
     const [post, setPost] = React.useState('')
+    const [isCommentLoading, setCommentLoading] = React.useState(true)
+    const [isPostComment, setPostComment] = React.useState(true)
+    const [isPostChange, setPostChange] = React.useState(false)
+    const [isPostLoading, setPostLoading] = React.useState(false)
     // const [isPostLoading, setPostLoading] = React.useState(true)
     // const [isLoading, setLoading] = React.useState(true)
     const [isAuthor, setAuthor] = React.useState('')
 
+    const MainButton = ({text}) => {
+        return( <Button onClick={() => {postComment();setCommentLoading(!isCommentLoading);document.getElementById('comment_input').childNodes[0].value = ''}}>{text}</Button>)
+    }
 
     React.useEffect(() => {
         console.log("useEffect 실행")
+        function getComment(){
+            console.log('comment')
+            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
+                credentials:'include',
+                headers:{
+                    'access-token':getCookie('accesstoken')
+                }
+            })
+            .then(res => res.json())
+            .then(json => {
+                setComment(json)
+                console.log(json)
+                console.log('comment 끝')
+            })
+        }
+        getComment()
     
-    }, [comment])
+    }, [isCommentLoading, match.params.post_id, isPostComment])
 
     function postComment() {
         console.log('post comment 시작')
         setComment('')
-        const valid_check = document.getElementById('_commentinput').value
+        // const valid_check = document.getElementById('_commentinput').value
+        const valid_check = document.getElementById('comment_input').childNodes[0].value
         if(valid_check === ''){
             alert('댓글을 입력해주세요')
         } else {
             fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
                 method:'POST',
                 headers:{
-                    'X-CSRFToken':getCookie('csrftoken')
+                    'X-CSRFToken':getCookie('csrftoken'),
+                    'access-token':getCookie('accesstoken')
                 },
                 body:JSON.stringify({
                     content:comment_input,
@@ -40,6 +115,7 @@ const DetailPage = ({history, match}) => {
                 setComInput('')
                 console.log(json)
                 console.log('post comment 종료')
+                setPostComment(!isPostComment)
             })
         }
     }
@@ -49,7 +125,8 @@ const DetailPage = ({history, match}) => {
             fetch('http://localhost:8000/main/user_check/', {
                 method:'POST',
                 headers:{
-                    'X-CSRFToken':getCookie('csrftoken')
+                    'X-CSRFToken':getCookie('csrftoken'),
+                    'access-token':getCookie('accesstoken')
                 },
                 body:JSON.stringify({
                     post_id:match.params.post_id,
@@ -71,17 +148,6 @@ const DetailPage = ({history, match}) => {
             })
         }
 
-        function getComment(){
-            console.log('comment')
-            fetch(`http://localhost:8000/main/comments/${match.params.post_id}/`, {
-                credentials:'include'
-            })
-            .then(res => res.json())
-            .then(json => {
-                setComment(json)
-            })
-        }
-
         function getPost(){
             fetch(`http://localhost:8000/main/posts/${match.params.post_id}/`, {
                 credentials:'include',
@@ -92,19 +158,20 @@ const DetailPage = ({history, match}) => {
             .then(res => res.json())
             .then(json => {
                 setPost(json)
-                console.log(post)
+                // console.log(post)
+                console.log(json)
+                console.log(json.res[0].content)
+                setPostLoading(false)
             })
         }
-        if(post===''){
-            getPost()
-        }
-        if(comment===''){
-            getComment()
-        }
-        if(isAuthor===''){
-            getAuth()
-        }
-    }, [comment, match.params.post_id, post, isAuthor])
+
+
+        getPost()
+        getAuth()
+        
+
+        setPostChange(false)
+    }, [ isPostLoading, match.params.post_id, isPostChange])
 
     function deletePost(){
         const answer = window.confirm("정말 삭제하시겠습니까?")
@@ -155,83 +222,122 @@ const DetailPage = ({history, match}) => {
         .catch(e => console.log(e))
     }
 
+    const likePost = () => {
+        fetch(`http://localhost:8000/main/like_post/${match.params.post_id}/`, {
+            method:'GET',
+            headers:{
+                'X-CSRFToken':getCookie('csrftoken'),
+                'access-token':getCookie('accesstoken')
+            },
+            credentials:'include'
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log(json.message)
+        })
+        .catch(e => console.log(e))
+    }
+
+    const deleteComment = (commentId) => {
+        fetch(`http://localhost:8000/main/comments/delete/${commentId}/`, {
+            method:'delete',
+            headers:{
+                'X-CSRFToken':getCookie('csrftoken'),
+                'access-token':getCookie('accesstoken')
+            }
+        })
+        .then(res => res.json())
+        .then(json => {
+            alert(json.message)
+            setCommentLoading(!isCommentLoading)
+        })
+    }
+
+    const PostControlBox = () => {
+        return(
+            <div style={{position:'absolute', top:0, right:0}}>
+                <HiOutlinePencilAlt title="수정하기" style={{cursor:'pointer', marginRight:5}} size={25} onClick={() => history.push({
+                                    pathname:'/modify',
+                                    state:{test:post.res[0]},
+                                })}/>
+                <RiDeleteBinLine title="삭제하기" style={{cursor:'pointer', marginRight:5}} size={25} onClick={() => deletePost()}/>
+                <RiCheckboxCircleLine title="성공" style={{cursor:'pointer', marginRight:5}} size={25} onClick={() => changeToSuccess()}/>
+                <RiDeleteBack2Line title="실패" style={{cursor:'pointer'}} size={25} onClick={() => changeToFail()}/>
+            </div>
+        )
+    }
+
     return(
         <div>
-            <div id='content' style={{justifyContent:'center'}}>
-                <div id='post' style={{backgroundColor:'#fff', position:'relative', width:'800px', textAlign:'center'}}>
-                    <div id='post_title' style={{position:'relative', height:'100px', fontWeight:'bold', fontSize:'44px', borderBottom:'2px solid #f2f2f2', marginTop:'10px', color:'gray'}}>
+            <div id='content'>
+                <div id='post' style={{backgroundColor:'#fff', position:'relative', width:'800px', padding:'20px', boxSizing:'border-box'}}>
+                    <SideBtn onClick={() => {likePost();setPostChange(!isPostChange)}}>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                            <div>{post===''?null:(post.is_liked?<AiFillHeart size={48} color="gray"/>:<AiOutlineHeart size={48} color="gray"/>)}</div>
+                            <div style={{color:'#808080'}}>{post===''?null:post.res[0].claps_count}</div>
+                        </div>
+                    </SideBtn>
+                    <div id='post_title' style={{position:'relative', fontWeight:'bold', fontSize:'44px', marginTop:'10px', color:'gray', marginLeft:'10px',  boxSizing:'border-box'}}>
                         {post ===''?
                         'loading'
                         :
                         post.res[0].title}
-                        <span style={{position:'absolute', left:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].author}</span>
-                        <span style={{position:'absolute', right:0, bottom:0, fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].created_dt.split('T')[0]}</span>
-                        <span>{post===''?'loading':post.res[0].views}</span>
-                    </div>
-                    {isAuthor?
-                        <div id='options' style={{position:'relative', width:'100%', height:'30px', background:'orange', textAlign:'right'}}>
-                            <span onClick={() => history.push({
-                                pathname:'/modify',
-                                state:{test:post.res[0]},
-                            })}>수정</span>
-                            <span onClick={() => deletePost()}>삭제</span>
-                            {post!==''?post.res[0].is_success === true || post.res[0].is_fail === true?
-                            null
-                            :
-                            <>
-                            <span onClick={() => changeToSuccess()}>성공</span>
-                            <span onClick={() => changeToFail()}>실패</span>
-                            </>
-                            :
-                            null
-                        }
-                            
+                        <div id='post_info' style={{display:'flex', flexDirection:'row', alignItems:'center', marginTop:'10px', paddingBottom:'10px', borderBottom:'2px solid #f2f2f2'}}>
+                            <div style={{ width:'50px', height:'50px', background:'gray', borderRadius:'25px', display:'inline-block'}}></div>
+                            <div style={{display:'inline-block', marginLeft:'5px'}}>
+                                <div style={{fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].author}</div>
+                                <div style={{fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].created_dt.split('T')[0]}</div>
+                            </div>
                         </div>
-                    :
-                        null
-                    }
-                    
-                    <div id='post_content' style={{marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px'}}>
+                        {isAuthor?<PostControlBox/>:null}
+                    </div>
+                    <div id='post_content' style={{padding:'10px', marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px', boxSizing:'border-box'}}>
+                        <div style={{fontSize:25, fontWeight:'bold'}}>{post===''?'loading':post.res[0].goal}</div><br/>
                         {post===''?
                         'loading'
                         :
-                        post.res[0].content}
-                        {isAuthor?
-                        'author'
-                    :
-                    'not author'}
-                    <span style={{position:'absolute'}}>{post===''?'loading':(post.is_liked===true?'좋아요 누름':'좋아요 안누름')}</span>
+                        
+                        post.res[0].content.split('\n').map((line, index) => {
+                            return (<span key={index}>{line}<br/></span>)
+                        })}
+                    
                     </div>
-                    <div id='post_comment'>
-                        <div id='comment_input' style={{position:'relative', width:'100%', height:'50px', backgroundColor:'thistle', display:'flex', alignItems:'center'}}>
-                            <span>{JSON.parse(localStorage.getItem('USER_INFO')).nickname}</span>
+                    <div id='post_comment' style={{position:'relative', width:'800px', paddingLeft:0, boxSizing:'border-box'}}>
+                    <div style={{position:'relative', top:'-10px', padding:'10px'}}>{comment===''?'loading':comment.res === undefined?'0':comment.res.length}개의 댓글</div>
+                        <div id='comment_input' style={{position:'relative',marginRight:'40px', minHeight:'170px', alignItems:'center', padding:'10px', textAlign:'right'}}>
                             {JSON.parse(localStorage.getItem('USER_INFO')).is_login?
                             <>
-                            <input id='_commentinput' type='text' placeholder='댓글' style={{width:'80%'}} onChange={(e) => setComInput(e.target.value)}/>
-                            <input type='button' value='등록' onClick={() => {postComment(); document.getElementById('_commentinput').value = '';}}/>
+                            {/* <input id='_commentinput' autoComplete="off" type='text' placeholder='댓글' style={{flex:4}} onChange={(e) => setComInput(e.target.value)}/>
+                            <input type='button' style={{flex:1}} value='등록' onClick={() => {postComment(); document.getElementById('_commentinput').value = ''; setCommentLoading(!isCommentLoading)}}/> */}
+                            <CommentInput onChange={(e) => setComInput(e.target.value)} placeholder="댓글을 입력해주세요"/>
+                            <MainButton text='작성하기'/>
                             </>
                             :
                             <>
-                            <input id='_commentinput' type='text' placeholder='로그인이 필요합니다.' disabled style={{width:'80%'}}/>
-                            <input type='button' value='등록' disabled/>
+                            <CommentInput onChange={(e) => setComInput(e.target.value)} placeholder="로그인이 필요합니다." disabled={true}/>
                             </>
                             }
                         </div>
-                        <div id='comment_list' style={{backgroundColor:'white'}}>
-                            <div style={{position:'relative', width:'100%', textAlign:'left', paddingLeft:'10px'}}>댓글</div>
+                        <div id='comment_list' test={isCommentLoading.toString()} style={{backgroundColor:'white', minHeight:'100px',marginRight:'40px', boxSizing:'border-box', paddingLeft:'10px'}}>
                             {comment===''?
                             'loading'
                             :
                             comment.res === undefined?
                             '댓글이 없습니다.'
                             :
-                            comment.res.map((element, index) => {
+                            comment.res.map((element) => {
                                 return(
-                                    <div key={index} className='comment_item'>
-                                        <div className='comment_thumbnail' style={{position:'relative', textAlign:'start', width:'10%', float:'left'}}>thumbnail</div>
-                                        <div style={{position:'relative', width:'90%', height:'100%', float:'left'}}>
-                                            <div className='comment_author' style={{position:'relative', textAlign:'start'}}>{element.author}</div>
-                                            <div className='comment_content' style={{position:'relative', textAlign:'start'}}>{element.content}</div>
+                                    <div className='comment_item' key={element.id}>
+                                        <div style={{display:'flex', alignItems:'center'}}>
+                                            <span style={{display:'inline-block', width:'50px', height:'50px', background:'gray', borderRadius:'30px', marginRight:'10px'}}></span>
+                                            <span>{element.author}</span>
+                                            {element.author_email === comment.request_email?<div onClick={() => window.confirm("정말 삭제하시겠습니까?")?deleteComment(element.id):null} style={{width:'80px', height:'40px', display:'flex', justifyContent:'center', alignItems:'center', position:'absolute', right:10, border:'1px solid #dddddd', borderRadius:'5px', boxSizing:'border-box', cursor:'pointer'}}>삭제</div>:null}
+                                        </div>
+                                        <div style={{margin:'10px', boxSizing:'border-box'}}>
+                                            {element.content}
+                                        </div>
+                                        <div style={{position:'absolute', bottom:10, right:10, color:'gray'}}>
+                                            {element.created_dt.split('T')[0]}
                                         </div>
                                     </div>
                                 )

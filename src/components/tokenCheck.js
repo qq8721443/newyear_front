@@ -1,7 +1,9 @@
-import {getCookie} from '../components/cookies';
+import {deleteCookie, getCookie, setCookie} from '../components/cookies';
 
 const tokenCheck = () => {
-    if(getCookie('accesstoken') === null){
+    if(getCookie('accesstoken') === null || getCookie('accesstoken') === 'undefined'){
+        deleteCookie('accesstoken')
+        deleteCookie('refreshtoken')
         localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
     } else {
         fetch('http://localhost:8000/main/expired_check/',{
@@ -14,7 +16,13 @@ const tokenCheck = () => {
         })
         .then(res => res.json())
         .then(json => {
-            console.log(json.message)
+            console.log("토큰 확인 결과 :" + json.message)
+            if (json.message === "access/refresh"){
+                setCookie('accesstoken', json.access_token)
+                setCookie('refreshtoken',json.refresh_token)
+            } else if (json.message === "access"){
+                setCookie('accesstoken', json.access_token)
+            }
         })
         .catch(e => console.log(e))
     }

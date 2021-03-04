@@ -11,27 +11,16 @@ body {
     background: #f2f2f2;
 }
 
-#header {
-    height:15vh;
-    background-color: #ffc764;
-    margin-bottom: 10px;
-}
 
 #content {
-    height:85vh;
     display: flex;
+    justify-content: center;
     margin-top: 10px;
     margin: 0 80px;
 }
 
-.ad-section {
-    flex:1;
-    background:gray;
-    margin:0 5px;
-}
-
 #con-section {
-    flex:4;
+    width:800px;
 }
 
 #banner {
@@ -56,7 +45,7 @@ body {
 #thumb {
     position: relative;
     height: 55vh;
-    margin: 0 5px;
+    /* margin: 0 5px; */
     margin-top: 10px;
     display: flex;
     gap: 10px;
@@ -139,48 +128,30 @@ body {
 }
 
 #logo {
-    position: absolute;
     width: 200px;
-    height: 15vh;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 0;
-    left: 85px;
-    background: rosybrown;
+    border-radius: 30px;
+    background: rgb(160, 160, 160);
 }
 
 #userinfo {
-    position: absolute;
+    position: relative;
     width:200px;
-    height:15vh;
+    height:60px;
+    border-radius: 30px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    right:85px;
-    top:0;
-    background: rosybrown;
+    background:  rgb(160,160,160);
 }
 
 #login-btn {
-    all:unset;
-    position: absolute;
-    right:0;
-    top: 6vh;
-    background: #ffc764;
-    color: white;
-    border:1px solid white;
-    border-radius: 2px;
-    width:60px;
-    height:20px;
-    text-align: center;
-    transition: all .3s;
+    cursor: pointer;
 }
 
-#login-btn:hover {
-    background: white;
-    border-color: #ffc764;
-    color: #ffc764;
-}
 
 .more-btn {
     position: absolute;
@@ -251,26 +222,26 @@ body {
 }
 
 /* 여기부터는 postlist.js css */
-#post_list {
-    
-}
 
 .post_list_item {
+    position: relative;
     width:100%;
-    height:70px;
+    min-height:200px;
     background: white;
     border-bottom: 1px solid #f2f2f2;
     cursor: pointer;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 #comment_list {
     position: relative;
-    width:100%;
 }
 
 .comment_item {
     position: relative;
     width:100%;
+    min-height: 200px;
     overflow: auto;
     border-bottom: 1px solid #f2f2f2;
 }
@@ -286,6 +257,11 @@ body {
 
 .menu_item:hover {
     background-color: gray;
-    color:white;
+    color:#dddddd;
 }
 
+#clap_btn:hover{
+    width:150px;
+    height:150px;
+    background: mediumaquamarine;
+}
