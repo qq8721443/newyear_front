@@ -52,7 +52,7 @@ const Oauth = ({location, history}) => {
                         //토큰 저장
                         setCookie('accesstoken', json.access_token)
                         setCookie('refreshtoken', json.refresh_token)
-                        localStorage.setItem('USER_INFO',JSON.stringify({'nickname':json.nickname, 'email':json.email, 'is_login':true}))
+                        localStorage.setItem('USER_INFO',JSON.stringify({'nickname':json.nickname, 'email':json.email, 'is_login':true, 'type':'kakao'}))
                         history.push('/')
                     } else {
                         history.push({
