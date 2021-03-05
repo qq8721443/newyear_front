@@ -18,7 +18,7 @@ function App() {
     <>
       <Route path='/' component={Header}/>
       <Route path='/' exact component={Main}/>
-      <Route path='/oauth' exact component={Oauth}/>
+      <Route path='/oauth' component={Oauth}/>
       <Route path='/logout' exact component={Logout}/>
       <Route path='/posts' exact component={PostList}/>
       <Route path='/posts/:post_id' exact component={DetailPage}/>
