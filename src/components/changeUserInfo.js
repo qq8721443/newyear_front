@@ -25,7 +25,7 @@ const Modal = (props) => {
 
     const submit = () => {
         fetch('http://qq8721443.pythonanywhere.com/main/change_user/', {
-            method:'patch',
+            method:'PATCH',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken'),
                 'access-token':getCookie('accesstoken')
