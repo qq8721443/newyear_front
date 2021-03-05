@@ -4,6 +4,7 @@ import {getCookie, setCookie} from '../components/cookies';
 
 const Oauth = ({location, history}) => {
     const query = queryString.parse(location.search)
+    console.log(query)
 
     useEffect(() => {
         fetch('http://qq8721443.pythonanywhere.com/main/oauth/', {
@@ -70,14 +71,8 @@ const Oauth = ({location, history}) => {
     
 
     return(
-        <>
-        <div>
-            코드 : {query.code}
-        </div>
-        <div>
-            액세스 토큰 : {}
-        </div>
-        </>
+        <div>oauth</div>
+
     )
 }
 
