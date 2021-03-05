@@ -27,7 +27,7 @@ const Header = ({history}) => {
                     <ul id='menu' style={{position:'absolute', top:60, margin:0, padding:0, zIndex:30, width:'150px'}}>
                             <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff', borderTopLeftRadius:10, borderTopRightRadius:10}} onClick={() => history.push('/create')}>글쓰기</li>
                             <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff'}} onClick={() => history.push('/user_info')}>내정보</li>
-                            <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff', borderBottomLeftRadius:10, borderBottomRightRadius:10}} onClick={() => window.location.href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://localhost:3000/logout'}>로그아웃</li>{/* 카카오/일반 분기 필요*/}
+                            <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff', borderBottomLeftRadius:10, borderBottomRightRadius:10}} onClick={() => window.location.href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=http://todowith.codes/logout'}>로그아웃</li>{/* 카카오/일반 분기 필요*/}
                     </ul>
                 </div>
             
