@@ -28,12 +28,12 @@ const Main = ({history}) => {
           getCsrfToken()
         }
 
-        if(getCookie('accesstoken') === null){
-            alert('access_token 없음')
-            if(getCookie('refreshtoken') === null){
-                alert('refresh_token 없음')
-            }
-        }
+        // if(getCookie('accesstoken') === null){
+        //     alert('access_token 없음')
+        //     if(getCookie('refreshtoken') === null){
+        //         alert('refresh_token 없음')
+        //     }
+        // }
         
         return() => {
             console.info('use effect 끝')
