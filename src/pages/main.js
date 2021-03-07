@@ -12,11 +12,6 @@ const Main = ({history}) => {
     const [info, setInfo] = React.useState('')
     const [hotPost, setHotPost] = React.useState('')
 
-
-    if(getCookie('accesstoken') === null){
-        localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
-    }
-
     React.useEffect(() => {
         console.info('use effect 시작')
 

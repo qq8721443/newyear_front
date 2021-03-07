@@ -4,7 +4,7 @@ import {IoIosArrowDown} from 'react-icons/io';
 import LOGO from '../img/그린거ㅋㅋㅋ.png';
 
 const HHeader = styled.div`
-    height:20vh;
+    height:100px;
     background: linear-gradient(to right, #050A30, #794BB5);
     margin-bottom: 10px;
     display:flex;

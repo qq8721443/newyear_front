@@ -40,6 +40,11 @@ const Modal = (props) => {
         .then(res => res.json())
         .then(json => {
             console.log(json)
+            const newValue = {
+                ...JSON.parse(localStorage.getItem('USER_INFO')),
+                'nickname':nickname
+            }
+            localStorage.setItem('USER_INFO', JSON.stringify(newValue))
             // document.getElementsByClassName('container')[0].classList.add('hidden')
             window.location.reload()
         })
