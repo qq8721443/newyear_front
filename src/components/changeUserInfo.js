@@ -24,7 +24,7 @@ const Modal = (props) => {
     const [description, setDescription] = React.useState(props.description)
 
     const submit = () => {
-        fetch('http://qq8721443.pythonanywhere.com/main/change_user/', {
+        fetch('https://qq8721443.pythonanywhere.com/main/change_user/', {
             method:'PATCH',
             headers:{
                 'X-CSRFToken':getCookie('csrftoken'),

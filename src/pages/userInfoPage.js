@@ -25,7 +25,7 @@ const UserInfo = ({history}) => {
     const [isInfoLoading, setInfoLoading] = React.useState(false)   
 
     React.useEffect(() => {
-            fetch('http://qq8721443.pythonanywhere.com/main/call_user_info/', {
+            fetch('https://qq8721443.pythonanywhere.com/main/call_user_info/', {
                 method:'GET',
                 headers:{
                     'X-CSRFToken':getCookie('csrftoken'),

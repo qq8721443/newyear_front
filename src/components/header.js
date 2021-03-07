@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import {IoIosArrowDown} from 'react-icons/io'
+import {IoIosArrowDown} from 'react-icons/io';
+import LOGO from '../img/그린거ㅋㅋㅋ.png';
 
 const HHeader = styled.div`
-    height:15vh;
-    background-color: #f2f2f2;
+    height:20vh;
+    background: linear-gradient(to right, #050A30, #794BB5);
     margin-bottom: 10px;
     display:flex;
     align-items:center;
@@ -17,7 +18,7 @@ const Header = ({history}) => {
     return(
         <HHeader>
                 <div id='logo' onClick={() => history.push('/')} style={{cursor:'pointer'}}>
-                    LOGO
+                    <img src={LOGO}  alt='logo' style={{height:'100%', objectFit:'cover'}}/>
                 </div>
                 <div id='userinfo'>
                     {JSON.parse(localStorage.getItem('USER_INFO')).is_login===true?
