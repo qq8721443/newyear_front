@@ -1,9 +1,12 @@
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+
 input:focus {
     outline: 2px solid skyblue;
 }
 
 
 body {
+    font-family: 'Spoqa Han Sans Neo';
     margin: 0;
     position: relative;
     width:100%;
