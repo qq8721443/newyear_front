@@ -123,7 +123,7 @@ const PostList = ({history}) => {
                 </div>
             </div>
             {JSON.parse(localStorage.getItem('USER_INFO')).is_login === true?
-            <div onClick={() => history.push('/create')} style={{position:'fixed', bottom:'10px', right:'10px', width:'100px', height:'100px', borderRadius:'50px', backgroundColor:'#6CB319', display:'table', textAlign:'center', cursor:'pointer'}}>
+            <div onClick={() => history.push('/create')} style={{position:'fixed', bottom:'10px', right:'10px', width:'100px', height:'100px', border:'3px solid #794BB5', color:'#050A30', background:'white', fontWeight:'bold', borderRadius:'50px', display:'table', textAlign:'center', cursor:'pointer'}}>
                 <p style={{display:'table-cell', verticalAlign:'middle'}}>글쓰기</p>
             </div>
             :
