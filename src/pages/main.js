@@ -107,7 +107,7 @@ const Main = ({history}) => {
             <div id='content'>
                 <div id='con-section'>
                     <div id='banner'>
-                        <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO'))===''?null:(JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 목표 달성률':'로그인이 필요합니다')}</span>
+                        <span style={{fontSize:'20px', fontWeight:'bold'}}></span>
                         <div style={{position:'relative', width:'100%', height:'20px', backgroundColor:'#f2f2f2', borderRadius:'10px', marginTop:'10px'}}>
                             <div style={{position:'relative', width:`${info===''?null:info.rate.success+'%'}`, height:'100%', backgroundColor:`${getCookie('accesstoken')!==null?'mediumaquamarine':'#f2f2f2'}`, borderRadius:'10px', textAlign:'center'}}>
                                 {info===''?null:info.rate.success+'%'}
