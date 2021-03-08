@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getCookie } from '../components/cookies';
 import {RiSettings4Fill} from 'react-icons/ri';
 import Modal from '../components/changeUserInfo';
+import Skeleton from 'react-loading-skeleton';
 
 
 const Select = styled.div`
@@ -54,10 +55,16 @@ const UserInfo = ({history}) => {
                         </div>
                         <div style={{flex:2, display:'flex', justifyContent:'center', flexDirection:'column'}}>
                             <div>
-                                <span style={{fontSize:'24px', fontWeight:'bold'}}>{info===null?'loading':info.info.nickname}</span>
-                                <span style={{marginLeft:'10px'}}>{info===null?'loading':info.info.email}</span>
+                                {info===null?
+                                <Skeleton height={30}/>
+                                :
+                                <>
+                                <span style={{fontSize:'24px', fontWeight:'bold'}}>{info.info.nickname}</span>
+                                <span style={{marginLeft:'10px'}}>{info.info.email}</span>
+                                </>
+                                }
                             </div>
-                            <div style={{marginTop:'10px', boxSizing:'border-box'}}>{info===null?'loading':info.info.description}</div>
+                            <div style={{marginTop:'10px', boxSizing:'border-box'}}>{info===null?<Skeleton/>:info.info.description}</div>
                         </div>
                     </div> 
                     <div className='inside' style={{position:'relative'}}>
