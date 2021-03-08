@@ -30,7 +30,7 @@ const CommentInput = styled.textarea`
         border:1px solid #dddddd;
         resize:none;
         outline:none;
-        font-family:serif;
+        font-family:"Spoqa Han Sans Neo";
         box-sizing:border-box;
 `
 
@@ -131,8 +131,7 @@ const DetailPage = ({history, match}) => {
                     'access-token':getCookie('accesstoken')
                 },
                 body:JSON.stringify({
-                    post_id:match.params.post_id,
-                    access_token:getCookie('accesstoken')
+                    post_id:match.params.post_id
                 }),
                 credentials:'include'
             })
