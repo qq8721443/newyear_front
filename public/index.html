@@ -28,7 +28,7 @@
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>Kakao.init("915a84abf8ccb236bb65fc51e2f609bf");</script>
     <script>
-      localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
+      {localStorage.getItem('USER_INFO')===null?localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false})):null}
     </script>
   </head>
   <body>
