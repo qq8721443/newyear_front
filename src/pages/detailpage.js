@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai';
 import {HiOutlinePencilAlt} from 'react-icons/hi';
 import {RiDeleteBack2Line, RiDeleteBinLine, RiCheckboxCircleLine} from 'react-icons/ri';
+import Skeleton from 'react-loading-skeleton';
 
 const SideBtn = styled.div`
         position:fixed;
@@ -280,22 +281,28 @@ const DetailPage = ({history, match}) => {
                     </SideBtn>
                     <div id='post_title' style={{position:'relative', fontWeight:'bold', fontSize:'44px', marginTop:'10px', color:'gray', marginLeft:'10px',  boxSizing:'border-box'}}>
                         {post ===''?
-                        'loading'
+                        <Skeleton height={44}/>
                         :
                         post.res[0].title}
                         <div id='post_info' style={{display:'flex', flexDirection:'row', alignItems:'center', marginTop:'10px', paddingBottom:'10px', borderBottom:'2px solid #f2f2f2'}}>
+                            {post===''?
+                            <Skeleton width={150}/>
+                            :
+                            <>
                             <div style={{ width:'50px', height:'50px', background:'gray', borderRadius:'25px', display:'inline-block'}}></div>
                             <div style={{display:'inline-block', marginLeft:'5px'}}>
-                                <div style={{fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].author}</div>
-                                <div style={{fontSize:'18px', fontWeight:'normal'}}>{post===''?'loading':post.res[0].created_dt.split('T')[0]}</div>
+                            <div style={{fontSize:'18px', fontWeight:'normal'}}>{post.res[0].author}</div>
+                            <div style={{fontSize:'18px', fontWeight:'normal'}}>{post.res[0].created_dt.split('T')[0]}</div>
                             </div>
+                            </>
+                            }
                         </div>
                         {isAuthor?<PostControlBox/>:null}
                     </div>
                     <div id='post_content' style={{padding:'10px', marginTop:'10px', width:'100%', textAlign:'start', minHeight:'300px', boxSizing:'border-box'}}>
-                        <div style={{fontSize:25, fontWeight:'bold'}}>{post===''?'loading':post.res[0].goal}</div><br/>
+                        <div style={{fontSize:25, fontWeight:'bold'}}>{post===''?<Skeleton/>:post.res[0].goal}</div><br/>
                         {post===''?
-                        'loading'
+                        <Skeleton height={100}/>
                         :
                         
                         post.res[0].content.split('\n').map((line, index) => {
@@ -304,7 +311,7 @@ const DetailPage = ({history, match}) => {
                     
                     </div>
                     <div id='post_comment' style={{position:'relative', width:'800px', paddingLeft:0, boxSizing:'border-box'}}>
-                    <div style={{position:'relative', top:'-10px', padding:'10px'}}>{comment===''?'loading':comment.res === undefined?'0':comment.res.length}개의 댓글</div>
+                    <div style={{position:'relative', top:'-10px', padding:'10px'}}>{comment===''?<Skeleton width={100}/>:comment.res === undefined?'0개의 댓글':`${comment.res.length}개의 댓글`}</div>
                         <div id='comment_input' style={{position:'relative',marginRight:'40px', minHeight:'170px', alignItems:'center', padding:'10px', textAlign:'right'}}>
                             {JSON.parse(localStorage.getItem('USER_INFO')).is_login?
                             <>
@@ -321,7 +328,17 @@ const DetailPage = ({history, match}) => {
                         </div>
                         <div id='comment_list' test={isCommentLoading.toString()} style={{backgroundColor:'white', minHeight:'100px',marginRight:'40px', boxSizing:'border-box', paddingLeft:'10px'}}>
                             {comment===''?
-                            'loading'
+                            <div className='comment_item'>
+                                <div>
+                                    <Skeleton width={100} height={30}/>
+                                </div>
+                                <div style={{margin:'10px', boxSizing:'border-box'}}>
+                                    <Skeleton height={60}/>
+                                </div>
+                                <div style={{position:'absolute', bottom:10, right:10, color:'gray'}}>
+                                    <Skeleton/>
+                                </div>
+                            </div>
                             :
                             comment.res === undefined?
                             '댓글이 없습니다.'

@@ -4,6 +4,7 @@ import {getCookie} from '../components/cookies';
 import LoginModal from '../components/loginModal';
 import PostModal from '../components/postModal';
 import tokenCheck from '../components/tokenCheck';
+import Skeleton from 'react-loading-skeleton';
 // import {Link} from 'react-router-dom';
 
 const Main = ({history}) => {
@@ -177,7 +178,9 @@ const Main = ({history}) => {
                             <p className='thumb-title'>인기있는 목표</p>
                             <div id='hope-container'>
                                 {hotPost===''||hotPost==='none'?
-                                'loading'
+                                <div style={{margin:10, boxSizing:'border-box'}}>
+                                    <Skeleton duration={1} height={30}/>
+                                </div>
                             :
                             
                             hotPost.map((element, index) => {
@@ -194,7 +197,9 @@ const Main = ({history}) => {
                             <p className='thumb-title'>최신 글</p>
                             <p className='more-btn' onClick={() => history.push('/posts')}>+더보기</p>
                             {post === ''|| post === 'none'?
-                            'loading'
+                            <div style={{margin:10, boxSizing:'border-box'}}>
+                                <Skeleton height={30}/>
+                            </div>
                             :
                             post.map((element, index) => {
                                 return(
