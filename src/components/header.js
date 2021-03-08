@@ -14,7 +14,6 @@ const HHeader = styled.div`
 
 const Header = ({history}) => {
 
-
     return(
         <HHeader>
                 <div id='logo' onClick={() => history.push('/')} style={{cursor:'pointer'}}>
