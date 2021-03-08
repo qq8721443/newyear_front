@@ -85,6 +85,7 @@ const DetailPage = ({history, match}) => {
                 console.log(json)
                 console.log('comment 끝')
             })
+            .catch(e=>console.log(e))
         }
         getComment()
     
