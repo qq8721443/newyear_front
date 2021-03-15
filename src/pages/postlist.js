@@ -1,7 +1,37 @@
 import React from 'react';
 import { getCookie } from '../components/cookies';
 import LoginModal from '../components/loginModal';
+import styled from 'styled-components';
 import '../css/testcss.css'
+
+const Btn = styled.div`
+    position:fixed;
+    bottom:10px;
+    right:10px;
+    width:100px;
+    height:100px;
+    border:3px solid #794BB5; 
+    color:#050A30; 
+    background:white;
+    font-weight:bold;
+    border-radius:50px; 
+    display:table; 
+    text-align:center;
+    cursor:pointer;
+    @media screen and (max-width:600px){
+        width:70px;
+        height:70px;
+        border-radius:40px;
+    }
+`
+
+const WriteBtn = ({history}) => {
+    return(
+        <Btn onClick={() => history.push('/create')}>
+            <p style={{display:'table-cell', verticalAlign:'middle'}}>글쓰기</p>
+        </Btn>
+    )
+}
 
 const PostList = ({history}) => {
     const [isLoading, setLoading] = React.useState(true)
@@ -123,9 +153,7 @@ const PostList = ({history}) => {
                 </div>
             </div>
             {JSON.parse(localStorage.getItem('USER_INFO')).is_login === true?
-            <div onClick={() => history.push('/create')} style={{position:'fixed', bottom:'10px', right:'10px', width:'100px', height:'100px', border:'3px solid #794BB5', color:'#050A30', background:'white', fontWeight:'bold', borderRadius:'50px', display:'table', textAlign:'center', cursor:'pointer'}}>
-                <p style={{display:'table-cell', verticalAlign:'middle'}}>글쓰기</p>
-            </div>
+            <WriteBtn/>
             :
             null
             }

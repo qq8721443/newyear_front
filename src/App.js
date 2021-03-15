@@ -11,8 +11,28 @@ import Register from './pages/register';
 import Header from './components/header';
 import UserInfo from './pages/userInfoPage';
 import Modify from './pages/modifypost';
+import {getCookie} from './components/cookies';
+import tokenCheck from './components/tokenCheck';
 
 function App() {
+
+  React.useLayoutEffect(() => {
+    console.log('app.js useLayoutEffect 시작')
+    // 토큰 체크
+    tokenCheck()
+    // 
+    if(getCookie('csrftoken') === null){
+      async function getCsrfToken() {
+          const response = await fetch(`https://qq8721443.pythonanywhere.com/main/get_csrf/`, {
+            credentials: 'include',
+          });
+          const data = await response.json();
+        document.cookie = `csrftoken=${data.csrfToken}`
+      }
+      getCsrfToken()
+    }
+
+  }, [])
   
   return(
     <>

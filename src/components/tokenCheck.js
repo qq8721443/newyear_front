@@ -5,6 +5,7 @@ const tokenCheck = () => {
         deleteCookie('accesstoken')
         deleteCookie('refreshtoken')
         localStorage.setItem('USER_INFO', JSON.stringify({'is_login':false}))
+        console.log('토큰 확인 결과 : 토큰 없음')
     } else {
         fetch('https://qq8721443.pythonanywhere.com/main/expired_check/',{
             method:'GET',

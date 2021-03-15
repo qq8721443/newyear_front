@@ -1,11 +1,45 @@
 import React from 'react';
 import '../css/maincss.css';
+import styled from 'styled-components';
 import {getCookie} from '../components/cookies';
 import LoginModal from '../components/loginModal';
 import PostModal from '../components/postModal';
-import tokenCheck from '../components/tokenCheck';
+// import tokenCheck from '../components/tokenCheck';
 import Skeleton from 'react-loading-skeleton';
 // import {Link} from 'react-router-dom';
+
+const Wrap = styled.div`
+    background: white;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    @media screen and (max-width:600px){
+        flex-direction: column;
+    }
+`
+
+const WrapChild1 = styled.div`
+    flex: 1;
+    background: #f2f2f2;
+    height: 25vh;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 10px;
+`
+
+const WrapChild2 = styled.div`
+    flex: 1;
+    background: #f2f2f2;
+    height: 25vh;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+`
 
 const Main = ({history}) => {
     // const [isPostLoading, setPostLoading] = React.useState(true)
@@ -16,26 +50,6 @@ const Main = ({history}) => {
     React.useEffect(() => {
         console.info('use effect 시작')
 
-        
-
-        if(getCookie('csrftoken') === null){
-          async function getCsrfToken() {
-              const response = await fetch(`https://qq8721443.pythonanywhere.com/main/get_csrf/`, {
-                credentials: 'include',
-              });
-              const data = await response.json();
-            document.cookie = `csrftoken=${data.csrfToken}`
-          }
-          getCsrfToken()
-        }
-
-        // if(getCookie('accesstoken') === null){
-        //     alert('access_token 없음')
-        //     if(getCookie('refreshtoken') === null){
-        //         alert('refresh_token 없음')
-        //     }
-        // }
-        
         return() => {
             console.info('use effect 끝')
         }
@@ -43,9 +57,6 @@ const Main = ({history}) => {
 
       React.useLayoutEffect(() => {
           console.info('use layout effect 시작')
-          console.log('token check 실행')
-          tokenCheck()
-          console.log(`access_token : ${getCookie('accesstoken')}`)
           if(getCookie('accesstoken') !== null){
             fetch('https://qq8721443.pythonanywhere.com/main/test/', {
                 method:'GET',
@@ -113,8 +124,8 @@ const Main = ({history}) => {
                                 {info===''?null:info.rate.success+'%'}
                             </div>
                         </div>
-                        <div style={{backgroundColor:'white', display:'flex', gap:'10px', marginTop:'10px'}}>
-                            <div style={{flex:1, backgroundColor:'#f2f2f2', height:'25vh', boxSizing:'border-box', borderRadius:'10px', padding:'10px'}}>
+                        <Wrap>
+                            <WrapChild1>
                                 {getCookie('accesstoken') !== null?
                                 <>
                                 <span style={{fontSize:'16px', fontWeight:'bold', display:'block'}}>진행중인 목표</span>
@@ -132,8 +143,8 @@ const Main = ({history}) => {
                                 null
                                 }
                                 
-                            </div>
-                            <div style={{flex:1, backgroundColor:'#f2f2f2', height:'25vh', boxSizing:'border-box', borderRadius:'10px', padding:'10px', display:'flex', justifyContent:'center', alignItems:'center', position:'relative'}}>
+                            </WrapChild1>
+                            <WrapChild2>
                                 {getCookie('accesstoken') !== null?
                                 <>
                                 <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
@@ -158,8 +169,8 @@ const Main = ({history}) => {
                             null
                                 }
                                 
-                            </div>
-                        </div>
+                            </WrapChild2>
+                        </Wrap>
                         {getCookie('accesstoken') !== null?
                         null
                         :
