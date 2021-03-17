@@ -4,9 +4,8 @@ import styled from 'styled-components';
 import {getCookie} from '../components/cookies';
 import LoginModal from '../components/loginModal';
 import PostModal from '../components/postModal';
-// import tokenCheck from '../components/tokenCheck';
 import Skeleton from 'react-loading-skeleton';
-// import {Link} from 'react-router-dom';
+import {AiOutlineGithub} from 'react-icons/ai';
 
 const Wrap = styled.div`
     background: white;
@@ -25,6 +24,7 @@ const WrapChild1 = styled.div`
     box-sizing: border-box;
     border-radius: 10px;
     padding: 10px;
+    min-height: 100px;
 `
 
 const WrapChild2 = styled.div`
@@ -38,7 +38,16 @@ const WrapChild2 = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
+    min-height: 100px;
+`
 
+const Footer = styled.div`
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #808080;
 `
 
 const Main = ({history}) => {
@@ -120,8 +129,8 @@ const Main = ({history}) => {
                     <div id='banner'>
                         <span style={{fontSize:'20px', fontWeight:'bold'}}>{JSON.parse(localStorage.getItem('USER_INFO')).is_login?JSON.parse(localStorage.getItem('USER_INFO')).nickname+' 님의 목표 달성률':'로그인이 필요합니다'}</span>
                         <div style={{position:'relative', width:'100%', height:'20px', backgroundColor:'#f2f2f2', borderRadius:'10px', marginTop:'10px'}}>
-                            <div style={{position:'relative', width:`${info===''?null:info.rate.success+'%'}`, height:'100%', backgroundColor:`${getCookie('accesstoken')!==null?'mediumaquamarine':'#f2f2f2'}`, borderRadius:'10px', textAlign:'center'}}>
-                                {info===''?null:info.rate.success+'%'}
+                            <div style={{position:'relative', width:`${info===''?null:info.rate?.success+'%'}`, height:'100%', backgroundColor:`${getCookie('accesstoken')!==null?'mediumaquamarine':'#f2f2f2'}`, borderRadius:'10px', textAlign:'center'}}>
+                                {info===''?null:info.rate?.success+'%'}
                             </div>
                         </div>
                         <Wrap>
@@ -153,7 +162,7 @@ const Main = ({history}) => {
                             </div>
                             <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
                                 <span>성공 목표</span>
-                                <span style={{display:'block', fontSize:'36px', color:'green'}}>{info===''?null:info.count.success}개</span>
+                                <span style={{display:'block', fontSize:'36px', color:'green'}}>{info===''?null:info.count?.success}개</span>
                             </div>
                             <div style={{flex:1, fontSize:'14px', textAlign:'center', borderRight:'1px solid gray'}}>
                                 <span>진행 목표</span>
@@ -225,9 +234,13 @@ const Main = ({history}) => {
                     </div>
                 </div>
             </div>
-            <div id='footer'>
+            {/* <div id='footer'>
                 footer
-            </div>
+            </div> */}
+            <Footer>
+                <div>@ TODOWITH - todowith.codes</div>
+                <div><AiOutlineGithub/>github.com/qq8721443</div>
+            </Footer>
             <LoginModal/>
             <PostModal/>
         </>

@@ -20,6 +20,12 @@ const SideBtn = styled.div`
         justify-content:center;
         align-items:center;
         cursor:pointer;
+        @media screen and (max-width:600px){
+            top: 75vh;
+            width:60px;
+            height:60px;
+            border-radius: 30px;
+        }
     `
 
 const CommentInput = styled.textarea`
@@ -256,7 +262,7 @@ const DetailPage = ({history, match}) => {
 
     const PostControlBox = () => {
         return(
-            <div style={{position:'absolute', top:0, right:0}}>
+            <div style={{position:'relative', float:'right'}}>
                 <HiOutlinePencilAlt title="수정하기" style={{cursor:'pointer', marginRight:5}} size={25} onClick={() => history.push({
                                     pathname:'/modify',
                                     state:{test:post.res[0]},
@@ -271,13 +277,7 @@ const DetailPage = ({history, match}) => {
     return(
         <div>
             <div id='content'>
-                <div id='post' style={{backgroundColor:'#fff', position:'relative', width:'800px', padding:'20px', boxSizing:'border-box'}}>
-                    <SideBtn onClick={() => {likePost();setPostChange(!isPostChange)}}>
-                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                            <div>{post===''?null:(post.is_liked?<AiFillHeart size={48} color="gray"/>:<AiOutlineHeart size={48} color="gray"/>)}</div>
-                            <div style={{color:'#808080'}}>{post===''?null:post.res[0].claps_count}</div>
-                        </div>
-                    </SideBtn>
+                <div id='post' style={{backgroundColor:'#fff', position:'relative',width:'100%', maxWidth:'800px', padding:'20px', boxSizing:'border-box'}}>
                     <div id='post_title' style={{position:'relative', fontWeight:'bold', fontSize:'44px', marginTop:'10px', color:'gray', marginLeft:'10px',  boxSizing:'border-box'}}>
                         {post ===''?
                         <Skeleton height={44}/>
@@ -309,9 +309,9 @@ const DetailPage = ({history, match}) => {
                         })}
                     
                     </div>
-                    <div id='post_comment' style={{position:'relative', width:'800px', paddingLeft:0, boxSizing:'border-box'}}>
+                    <div id='post_comment' style={{position:'relative', width:'100%', paddingLeft:0, boxSizing:'border-box'}}>
                     <div style={{position:'relative', top:'-10px', padding:'10px'}}>{comment===''?<Skeleton width={100}/>:comment.res === undefined?'0개의 댓글':`${comment.res.length}개의 댓글`}</div>
-                        <div id='comment_input' style={{position:'relative',marginRight:'40px', minHeight:'170px', alignItems:'center', padding:'10px', textAlign:'right'}}>
+                        <div id='comment_input' style={{position:'relative', minHeight:'170px', alignItems:'center', padding:'10px', textAlign:'right'}}>
                             {JSON.parse(localStorage.getItem('USER_INFO')).is_login?
                             <>
                             {/* <input id='_commentinput' autoComplete="off" type='text' placeholder='댓글' style={{flex:4}} onChange={(e) => setComInput(e.target.value)}/>
@@ -325,7 +325,7 @@ const DetailPage = ({history, match}) => {
                             </>
                             }
                         </div>
-                        <div id='comment_list' test={isCommentLoading.toString()} style={{backgroundColor:'white', minHeight:'100px',marginRight:'40px', boxSizing:'border-box', paddingLeft:'10px'}}>
+                        <div id='comment_list' test={isCommentLoading.toString()} style={{backgroundColor:'white', minHeight:'100px', boxSizing:'border-box', paddingLeft:'10px'}}>
                             {comment===''?
                             <div className='comment_item'>
                                 <div>
@@ -364,6 +364,12 @@ const DetailPage = ({history, match}) => {
                     </div>
                 </div>
             </div>
+            <SideBtn onClick={() => {likePost();setPostChange(!isPostChange)}}>
+                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                    <div>{post===''?null:(post.is_liked?<AiFillHeart size={36} color="gray"/>:<AiOutlineHeart size={36} color="gray"/>)}</div>
+                    <div style={{color:'#808080'}}>{post===''?null:post.res[0].claps_count}</div>
+                </div>
+            </SideBtn>
             <LoginModal/>
         </div>
     )

@@ -93,7 +93,7 @@ const LoginModal = () => {
                         <input className='input_text' type='password' placeholder='비밀번호를 입력하세요' onChange={e => setPassword(e.target.value)} style={{all:'unset', width:'0', height:'40px', paddingTop:'10px', borderBottom:'2px solid #f2f2f2'}}/>
                         <input className='input_text' type='text' placeholder='닉네임을 입력하세요' onChange={e => setNickname(e.target.value)} style={{all:'unset', width:'0', height:'40px', paddingTop:'10px', borderBottom:'2px solid #f2f2f2'}}/>
                         <input type='button' value='회원가입' style={{all:'unset', width:'0', height:'40px', backgroundColor:'mediumaquamarine', marginTop:'10px', borderRadius:'5px', textAlign:'center', color:'white', cursor:'pointer', fontWeight:'bold'}} onClick={() => sendRegister()}/>
-                        <div className='hidden' style={{position:'relative', bottom:'-50px', overflow:'hidden', color:'gray'}}>이미 계정이 있으신가요?<span onClick={() => change_design_2()} style={{color:'mediumaquamarine', fontWeight:'bold'}}>로그인</span></div>
+                        <div className='hidden' style={{position:'relative', bottom:'-10px', overflow:'hidden', color:'gray'}}>이미 계정이 있으신가요?<span onClick={() => change_design_2()} style={{color:'mediumaquamarine', fontWeight:'bold'}}>로그인</span></div>
                     </div>
                     <div id='login_modal_right'>
                         <input className='input_text' type='text' placeholder='이메일을 입력하세요' style={{all:'unset', width:'300px', height:'40px', paddingTop:'10px', borderBottom:'2px solid #f2f2f2'}} />
@@ -101,7 +101,7 @@ const LoginModal = () => {
                         <input type='button' value='로그인' onClick={() => sendLogin()} style={{all:'unset', width:'300px', height:'40px', backgroundColor:'mediumaquamarine', marginTop:'10px', borderRadius:'5px', textAlign:'center', color:'white', cursor:'pointer', fontWeight:'bold'}}/>
                         <div style={{width:'300px', marginTop:'30px', color:'gray', overflow:'hidden'}}>소셜 로그인</div>
                         <input type='button' value='카카오계정으로 로그인' style={{all:'unset', width:'300px', height:'40px', backgroundColor:'white', borderRadius:'5px', textAlign:'center', color:'mediumaquamarine', cursor:'pointer', fontWeight:'bold', border:'2px solid mediumaquamarine', boxSizing:'border-box'}} onClick={() => window.location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=20887ce0003dfa62635c435e177fee15&redirect_uri=https://todowith.codes/oauth&response_type=code'}/>
-                        <div style={{position:'relative', textAlign:'right', width:'300px', bottom:'-50px', right:'5px', color:'gray', overflow:'hidden'}}>아이디가 없으신가요?<span style={{color:'mediumaquamarine', fontWeight:'bold', cursor:'pointer'}} onClick={() => change_design_1()}>회원가입</span></div>
+                        <div style={{position:'relative', textAlign:'right', width:'300px', bottom:'-10px', right:'5px', color:'gray', overflow:'hidden'}}>아이디가 없으신가요?<span style={{color:'mediumaquamarine', fontWeight:'bold', cursor:'pointer'}} onClick={() => change_design_1()}>회원가입</span></div>
                     </div>
                     <span style={{position:'absolute', top:'10px', right:'15px', fontSize:'22px', color:'gray', cursor:'pointer'}} onClick={() => document.getElementById('login_modal').classList.add('hidden')}>ⅹ</span>
                 </div>

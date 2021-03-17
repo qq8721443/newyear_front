@@ -19,6 +19,18 @@ const Select = styled.div`
     }
     background: ${props => props.num === props.now? '#f2f2f2':'white'};
 `
+//width:'150px', height:'150px', borderRadius:'100px', background:'gray'
+const ThumbArea = styled.div`
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    background: gray;
+    @media screen and (max-width: 600px){
+        width:100px;
+        height:100px;
+        border-radius: 50px;
+    }
+`
 
 const UserInfo = ({history}) => {
     const [nowSelect, setSelect] = React.useState(0)
@@ -49,9 +61,7 @@ const UserInfo = ({history}) => {
                 <div className='problem' style={{backgroundColor:'#fff', position:'relative', width:'800px', minHeight:'800px', padding:'20px', boxSizing:'border-box'}}>
                     <div style={{width:'100%', height:'200px', display:'flex'}}>
                         <div style={{flex:1, display:'flex', justifyContent:'center', alignItems:'center'}}>
-                            <div style={{width:'150px', height:'150px', borderRadius:'100px', background:'gray'}}>
-
-                            </div>
+                            <ThumbArea/>
                         </div>
                         <div style={{flex:2, display:'flex', justifyContent:'center', flexDirection:'column'}}>
                             <div>

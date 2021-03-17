@@ -24,7 +24,7 @@ const Header = ({history}) => {
                 <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <p style={{display:'flex', alignItems:'center'}}><span style={{display:'inline-block', width:30, height:30, borderRadius:15, marginRight:10, background:'#f2f2f2'}}></span>{JSON.parse(localStorage.getItem('USER_INFO')).nickname}</p>
                     <span style={{position:'absolute', bottom:0}}><IoIosArrowDown></IoIosArrowDown></span>
-                    <ul id='menu' style={{position:'absolute', top:60, margin:0, padding:0, zIndex:30, width:'150px'}}>
+                    <ul id='menu' style={{position:'absolute', top:55, margin:0, padding:0, zIndex:30, width:'150px'}}>
                             <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff', borderTopLeftRadius:10, borderTopRightRadius:10}} onClick={() => history.push('/create')}>글쓰기</li>
                             <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff'}} onClick={() => history.push('/user_info')}>내정보</li>
                             <li className='menu_item' style={{display:'flex', alignItems:'center', listStyle:'none', paddingLeft:5, width:'150px', height:'30px', background:'#fff', borderBottomLeftRadius:10, borderBottomRightRadius:10}} onClick={() => window.location.href='https://kauth.kakao.com/oauth/logout?client_id=20887ce0003dfa62635c435e177fee15&logout_redirect_uri=https://todowith.codes/logout'}>로그아웃</li>{/* 카카오/일반 분기 필요*/}
