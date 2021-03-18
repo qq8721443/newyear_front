@@ -27,11 +27,9 @@ const ChangeUserInfoModal = styled.div`
     width: 500px;
     height: 300px;
     background: white;
-    top: 50vh;
-    left: 50vw;
+    // top: 50vh;
+    // left: 50vw;
     box-sizing: border-box;
-    margin-left: -250px;
-    margin-top: -150px;
     border-radius: 5px;
     padding: 10px;
     @media screen and (max-width:600px){
