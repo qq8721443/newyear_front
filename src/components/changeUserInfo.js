@@ -18,6 +18,30 @@ const Button = styled.div`
     align-items:center;
 `
 
+const ChangeUserInfoModal = styled.div`
+    position:relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: 300px;
+    background: white;
+    top: 50vh;
+    left: 50vw;
+    box-sizing: border-box;
+    margin-left: -250px;
+    margin-top: -150px;
+    border-radius: 5px;
+    padding: 10px;
+    @media screen and (max-width:600px){
+        width: 100vw;
+        margin: 0;
+        top:0;
+        left:0;
+    }
+`
+
 const Modal = (props) => {
     const [nickname, setNickname] = React.useState(props.nickname)
     // const [email, setEmail] = React.useState(props.email)
@@ -52,10 +76,10 @@ const Modal = (props) => {
 
     return(
         <div className='container hidden'>
-            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.5)'}}>
+            <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.5)', display:'flex', justifyContent:'center', alignItems:'center'}}>
                 
-            </div>
-            <div style={{position:'fixed', display:'flex', justifyContent:'center',alignItems:'center', flexDirection:'column', width:'500px', height:'300px', background:'white', top:'50vh', left:'50vw', boxSizing:'border-box', marginLeft:'-250px', marginTop:'-150px', borderRadius:'5px', padding:'10px'}}>
+            
+            <ChangeUserInfoModal>
                 
                 <input style={{all:'unset', borderBottom:'1px solid #dddddd', outline:'none', width:'250px', height:'30px', marginBottom:'10px', fontSize:'25'}} onChange={e => {setNickname(e.target.value);console.log(nickname)}} value={nickname} type='text'/>
                 {/* <input style={{all:'unset', borderBottom:'1px solid #dddddd', outline:'none', width:'250px', height:'30px', marginBottom:'10px', fontSize:'25'}} onChange={e => setEmail(e.target.value)} value={email} type='text'/> */}
@@ -66,6 +90,7 @@ const Modal = (props) => {
                     <Button type='sub' onClick={() => document.getElementsByClassName('container')[0].classList.add('hidden')}>취소</Button>
                     <Button type='main' onClick={submit}>적용</Button>
                 </div>
+            </ChangeUserInfoModal>
             </div>
         </div>
     )

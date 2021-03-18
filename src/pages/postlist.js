@@ -78,7 +78,8 @@ const PostList = ({history}) => {
                     console.log(post)
                     setFetching(false)
                 } else {
-                    document.getElementsByClassName('scroll_status')[0].innerText = '더 이상 데이터가 없습니다.'
+                    if (document.getElementsByClassName('scroll_status')[0] !== undefined)
+                        document.getElementsByClassName('scroll_status')[0].innerText = '더 이상 데이터가 없습니다.'
                 }                
             })
         }

@@ -6,7 +6,6 @@ import 'react-calendar/dist/Calendar.css';
 const CreatePost = ({history}) => {
     const [title, setTitle] = React.useState('')
     const [content, setContent] = React.useState('')
-    const [object, setObject] = React.useState('')
     const [dateDiff, setDateDiff] = React.useState()
     const [finDate, setFinDate] = React.useState()
 
@@ -34,7 +33,6 @@ const CreatePost = ({history}) => {
             body:JSON.stringify({
                 title:title,
                 content:content,
-                object:object,
                 // author:JSON.parse(localStorage.getItem('USER_INFO')).nickname, //액세스 토큰 받아서 조회 가능함
                 // author_email:JSON.parse(localStorage.getItem('USER_INFO')).email, // 이것도
                 date_difference:dateDiff
@@ -42,7 +40,6 @@ const CreatePost = ({history}) => {
             credentials:'include'
         })
         const data = await res.json()
-        console.log(object)
         console.log(finDate)
         console.log(data)
         history.push(`/posts/${data.res[data.res.length - 1].post_id}`)
@@ -66,7 +63,6 @@ const CreatePost = ({history}) => {
             <div id='content' style={{justifyContent:'center'}}>
                 <div id='create_post' style={{backgroundColor:'#fff', position:'relative', width:'800px', textAlign:'center'}}>
                     <input type='text' onChange={(e) => setTitle(e.target.value)} placeholder='제목을 입력해주세요' style={{all:'unset', position:'relative', width:'90%', height:'100px', borderBottom:'1px solid #f2f2f2', fontSize:'30px', textAlign:'start'}}/>
-                    <input type='text' onChange={e => setObject(e.target.value)} placeholder='목표를 입력해주세요' style={{all:'unset', position:'relative', width:'90%', textAlign:'left'}}/>
                     <textarea onChange={(e) => setContent(e.target.value)} placeholder='내용을 입력해주세요' style={{all:'unset', position:'relative', width:'90%', height:'400px', marginTop:'20px', textAlign:'start'}}/>
                     <Calendar onChange={(value, event)=>{alert(value);checkDate(value)}}/>
                     <div id='submit_area' style={{position:'relative', width:'100%', height:'50px', backgroundColor:'white'}}>
